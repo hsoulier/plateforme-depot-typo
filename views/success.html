@@ -1,12 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1>Success</h1>
-</body>
-</html>
+{{>header}}
+
+<div class="bg-gray-100 shadow-md mx-auto p-8 rounded-lg">
+    {{#success}}
+    <div class="success">
+        <h1 class="text-5xl font-bold text-gray-700 dark:text-gray-200 text-center mb-8">Succès</h1>
+        <p class="text-center">Votre dépôt de fichier a été reçu</p>
+    </div>
+    {{/success}}
+    {{^success}}
+    <h1 class="text-5xl font-bold text-gray-700 dark:text-gray-200 text-center mb-8">Erreur</h1>
+    <p class="text-center">Une erreur est survenue, essaie plus tard </p>
+    {{/success}}
+</div>
+<canvas class="absolute w-screen h-screen"></canvas>
+{{>footer}}

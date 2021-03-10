@@ -12,10 +12,10 @@ export default function uploadWork(req, res, next) {
             file: req.file.filename,
         })
         repo.save((err) => {
-            if (err) return res.send("Une erreur est survenue")
-            res.send("Success")
+            if (err) return res.render("Success", { success: false })
+            res.render("Success", {success: true})
         })
     } catch (e) {
-        res.send("Une erreur est survenue")
+        res.render("Success", { success: false })
     }
 }

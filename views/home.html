@@ -1,41 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
-
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="css/style.css">
-        <title>Dépôt de typo</title>
-    </head>
-
-    <body class="bg-gray-50 flex items-center justify-center min-h-screen">
-        <form action="/submit-work" method="post" enctype="multipart/form-data" class="bg-gray-100 shadow-md w-4/5 mx-auto p-8 rounded-lg">
-            <h1 class="text-4xl">Dépose ton travail</h1>
-                <div class="flex">
-                    <div>
-                        <label for="nickname">Prénom *</label>
-                        <input type="text" name="nickname" placeholder="Jean" required>
-                    </div>
-                    <div>
-                        <label for="name">Nom *</label>
-                        <input type="text" name="name" placeholder="Castex" required>
-                    </div>
-                </div>
-                <!-- TODO: Préfixe insta logo -->
-                <div>
-                    <label for="instagram">Instagram</label>
-                    <input type="text" name="instagram">
-                </div>
-                <!-- TODO: Préfixe twitter logo -->
-                <div>
-                    <label for="twitter">Twitter</label>
-                    <input type="text" name="twitter">
-                </div>
-                <input type="file" name="file" label="Dépose ton fichier ou clique ici." is="drop-files" />
-                <button type="submit">Envoyer mon travail</button>
-        </form>
-        <script type="module" src="js/app.js"></script>
-    </body>
-
-</html>
+{{>header}}
+<form action="/submit-work" method="post" enctype="multipart/form-data"
+    class="bg-gray-100 shadow-md w-4/5 mx-auto p-8 rounded-lg">
+    <h1 class="text-5xl font-bold text-gray-700 dark:text-gray-200 text-center mb-8">Dépose ton travail</h1>
+    <div class="flex mb-4 w-full gap-2">
+        <div class="flex-grow">
+            <label for="nickname" class="block mb-2 text-sm text-gray-600 dark:text-gray-400">Prénom *</label>
+            <input type="text" name="nickname" placeholder="Jean"
+                class="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-100 focus:border-indigo-300 dark:bg-gray-700 dark:text-white dark:placeholder-gray-500 dark:border-gray-600 dark:focus:ring-gray-900 dark:focus:border-gray-500"
+                required>
+        </div>
+        <div class="flex-grow">
+            <label for="name" class="block mb-2 text-sm text-gray-600 dark:text-gray-400">Nom *</label>
+            <input type="text" name="name" placeholder="Castex"
+                class="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-100 focus:border-indigo-300 dark:bg-gray-700 dark:text-white dark:placeholder-gray-500 dark:border-gray-600 dark:focus:ring-gray-900 dark:focus:border-gray-500"
+                required>
+        </div>
+    </div>
+    <div class="flex mb-4 w-full gap-2">
+        <div class="flex-grow">
+            <label for="instagram" class="block mb-2 text-sm text-gray-600 dark:text-gray-400">Instagram</label>
+            <input type="text" name="instagram"
+                class="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-100 focus:border-indigo-300 dark:bg-gray-700 dark:text-white dark:placeholder-gray-500 dark:border-gray-600 dark:focus:ring-gray-900 dark:focus:border-gray-500"
+                required>
+        </div>
+        <div class="flex-grow">
+            <label for="twitter" class="block mb-2 text-sm text-gray-600 dark:text-gray-400">Twitter</label>
+            <input type="text" name="twitter"
+                class="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-100 focus:border-indigo-300 dark:bg-gray-700 dark:text-white dark:placeholder-gray-500 dark:border-gray-600 dark:focus:ring-gray-900 dark:focus:border-gray-500"
+                required>
+        </div>
+    </div>
+    <input type="file" name="file" label="Dépose ton fichier ou clique ici." is="drop-files" />
+    <button type="submit"
+        class="mt-8 w-full px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10">Envoyer
+        mon travail</button>
+        <small class="text-sm text-gray-400 text-center mt-4 block">Les champs avec des * sont obligatoires</small>
+</form>
+{{>footer}}
