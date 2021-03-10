@@ -5,6 +5,7 @@ import morgan from "morgan"
 import cors from "cors"
 import mongoose from "mongoose"
 import mustacheExpress from "mustache-express"
+import uploadRepo from "./controllers/repo.js"
 import upload from "./controllers/multer.js"
 
 const app = express()
@@ -17,9 +18,9 @@ mongoose.connect(process.env.DB_URI, {
 
 const db = mongoose.connection
 db.on("error", (err) => {
-    console.error(`connection error ${err}`)
+    console.error(`connection error: ${err}`)
 })
-db.on("open", () => {
+db.once("open", () => {
     console.log("Connected")
 })
 
@@ -36,9 +37,7 @@ app.set("views", "views")
 app.get("/", (req, res) => {
     res.render("home", { name: "Sherlynn" })
 })
-app.post("/submit-work", upload, (req, res) => {
-    res.send(`File submitted and file is ${req.file}`)
-})
+app.post("/submit-work", upload, uploadRepo)
 
 app.listen(3005, () => {
     console.log("App listen on http://localhost:3005")
