@@ -1,6 +1,7 @@
 {{>header}}
-<form action="/login-user" method="post" enctype="application/x-www-form-urlencoded" class="bg-gray-100 shadow-md w-4/5 mx-auto p-8 rounded-lg max-w-4xl">
-    <h1 class="text-5xl font-bold text-gray-700 dark:text-gray-200 text-center mb-8">Connexion au Dashboard</h1>
+<form action="/login-user" method="post" enctype="application/x-www-form-urlencoded"
+    class="bg-gray-100 shadow-md w-4/5 mx-auto p-8 rounded-lg max-w-xl">
+    <h1 class="text-5xl font-bold text-gray-700 dark:text-gray-200 text-center mb-8">Dashboard</h1>
     {{#error}}
     <p class="mb-4 text-center">{{error}}</p>
     {{/error}}
@@ -8,13 +9,13 @@
         <label for="user" class="block mb-2 text-sm text-gray-600 dark:text-gray-400">Nom</label>
         <input type="text" name="user" placeholder="JeanCastexDu667"
             class="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-100 focus:border-indigo-300 dark:bg-gray-700 dark:text-white dark:placeholder-gray-500 dark:border-gray-600 dark:focus:ring-gray-900 dark:focus:border-gray-500"
-            required>
+            required value="test">
     </div>
     <div>
         <label for="password" class="block mb-2 text-sm text-gray-600 dark:text-gray-400">password</label>
         <input type="password" name="password"
             class="w-full px-3 py-2 placeholder-gray-300 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-indigo-100 focus:border-indigo-300 dark:bg-gray-700 dark:text-white dark:placeholder-gray-500 dark:border-gray-600 dark:focus:ring-gray-900 dark:focus:border-gray-500"
-            required>
+            required value="test">
     </div>
     <button type="submit"
         class="mt-8 w-full px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10">Se

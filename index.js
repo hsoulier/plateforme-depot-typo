@@ -1,43 +1,45 @@
 import dotenv from "dotenv"
 import express, { json } from "express"
+import bodyParser from "body-parser"
 import helmet from "helmet"
 import morgan from "morgan"
 import cors from "cors"
 import mongoose from "mongoose"
-// import session from "express-session"
+import session from "express-session"
 import mustacheExpress from "mustache-express"
-import uploadRepo from "./controllers/repo.js"
+import {uploadRepo, getAllRepos} from "./controllers/repo.js"
+import { loginUser, addingUser } from "./controllers/user.js"
 import upload from "./controllers/multer.js"
 
 dotenv.config()
 const app = express()
 
-mongoose.connect(process.env.DB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-})
-
-const db = mongoose.connection
-db.on("error", (err) => {
-    console.error(`connection error: ${err}`)
-})
-db.once("open", () => {
-    console.log("Connected")
-})
+mongoose
+    .connect(process.env.DB_URI, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    })
+    .then(() => {
+        console.log("Connected")
+    })
+    .catch((err) => {
+        console.error(`connection error: ${err}`)
+    })
 
 // Global middlewares
-// app.set("trust proxy", 1)
-// app.use(
-//     session({
-//         secret: process.env.SECRET_SESSION,
-//         proxy: true,
-//         resave: false,
-//         saveUninitialized: true,
-//         cookie: { secure: true },
-//     })
-// )
-app.use(cors())
+app.set("trust proxy", 1)
+app.use(
+    session({
+        secret: process.env.SECRET_SESSION,
+        name: "uniqueSessionID",
+        proxy: true,
+        resave: true,
+        saveUninitialized: true,
+        cookie: { secure: true },
+    })
+)
 app.use(json())
+app.use(cors())
 app.use(express.static("public"))
 app.use(helmet())
 app.use(morgan("dev"))
@@ -49,37 +51,12 @@ app.get("/", (req, res) => {
     res.render("home", { home: true })
 })
 app.post("/submit-work", upload, uploadRepo)
+app.post("/login-user", loginUser)
 app.get("/login", (req, res) => {
-    // res.render("login", { login: true, error: req.session.error })
-    res.render("login", { login: true })
+    const error = req.session.error || false
+    res.render("login", { login: true, error: error })
 })
-app.post("/login-user", (req, res) => {
-    console.log(req.body)
-    const { user, password } = req.body
-    console.log({
-        user,
-        dbname: process.env.USER_TEST,
-        password,
-        dbpass: process.env.PASSWORD_TEST,
-    })
-    if (
-        user !== process.env.USER_TEST ||
-        password !== process.env.PASSWORD_TEST
-    ) {
-        // req.session.error = "Mauvais identifiants"
-        res.redirect("/login")
-    } else {
-        // req.session.error = false
-        req.session.login = true
-    }
-})
-app.get("/dashboard", (req, res) => {
-    console.log(req.session.login)
-    if (!req.session.login) {
-        res.redirect("/login")
-    }
-    res.render("dashboard")
-})
+app.get("/dashboard",getAllRepos)
 
 app.listen(3005, () => {
     console.log("App listen on http://localhost:3005")
