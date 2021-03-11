@@ -26,7 +26,7 @@ export async function loginUser(req, res, next) {
             })
         })
     } catch (e) {
-        res.render("Success", { success: false })
+        res.render("success", { success: false })
     }
 }
 
@@ -36,11 +36,11 @@ export async function addingUser(req, res) {
         try {
             const login = new User({ user, password: hash })
             login.save((err) => {
-                if (err) return res.render("Success", { success: false })
-                res.render("Success", { success: true })
+                if (err) return res.render("success", { success: false })
+                res.render("success", { success: true })
             })
         } catch (e) {
-            res.render("Success", { success: false })
+            res.render("success", { success: false })
         }
     })
 }

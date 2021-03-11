@@ -14,11 +14,11 @@ export function uploadRepo(req, res, next) {
             file: req.file.filename,
         })
         repo.save((err) => {
-            if (err) return res.render("Success", { success: false })
-            res.render("Success", { success: true })
+            if (err) return res.render("success", { success: false })
+            res.render("success", { success: true })
         })
     } catch (e) {
-        res.render("Success", { success: false })
+        res.render("success", { success: false })
     }
 }
 
