@@ -1,6 +1,8 @@
 import Repo from "../models/Repo.js"
 import zipFolder from "zip-a-folder"
+import archiver from "archiver"
 import path from "path"
+import fs from "fs"
 
 export function uploadRepo(req, res, next) {
     const { nickname, name, instagram, twitter } = req.body
@@ -43,8 +45,43 @@ export function getAllRepos(req, res) {
         res.redirect("/login")
     }
 }
-
 export function zipFiles(req, res) {
+    const __dirname = path.resolve()
+    const filename = `fonts-${Math.random().toString(36).substring(2)}.zip`
+    const output = fs.createWriteStream(__dirname + `/public/repos/${filename}`)
+    const archive = archiver("zip", {
+        zlib: { level: 9 }, // Sets the compression level.
+    })
+    output.on("close", () => {
+        console.log(
+            `${formatBytes(archive.pointer())} total bytes, archiver done`
+        )
+        res.redirect(`/repos/${filename}`)
+    })
+
+    output.on("end", () => {
+        console.log("Data has been drained")
+        res.redirect(`/repos/${filename}`)
+    })
+    archive.on("warning", (err) => {
+        if (err.code === "ENOENT") {
+            console.log(err)
+        } else {
+            throw err
+        }
+    })
+
+    archive.on("error", (err) => {
+        res.status(500).send("Error")
+        throw err
+    })
+    archive.pipe(output)
+    archive.directory(path.join(__dirname, "/public/uploads/"), false)
+    archive.finalize()
+}
+
+// With the Module Zip-A-Folder
+export function zipFilesZipFolder(req, res) {
     const filename = `fonts-${Math.random().toString(36).substring(2)}.zip`
     const __dirname = path.resolve()
     console.log(path.join(__dirname, "../index.js"))
@@ -59,4 +96,18 @@ export function zipFiles(req, res) {
         }
     )
     res.redirect(`/repos/${filename}`)
+}
+
+
+
+function formatBytes(bytes, decimals = 2) {
+    if (bytes === 0) return "0 Bytes"
+
+    const k = 1024
+    const dm = decimals < 0 ? 0 : decimals
+    const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"]
+
+    const i = Math.floor(Math.log(bytes) / Math.log(k))
+
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i]
 }

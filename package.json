@@ -5,12 +5,14 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
+    "test:zip": "node test/zipFolder.js",
     "dev": "nodemon index.js",
     "start": "node index.js",
     "tailwind": "postcss src/css/style.css -o public/css/style.css"
   },
   "dependencies": {
     "@handlebars/allow-prototype-access": "^1.0.3",
+    "archiver": "^5.3.0",
     "bcrypt": "^5.0.1",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",

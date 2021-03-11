@@ -3,8 +3,10 @@ import bcrypt from "bcrypt"
 
 export async function loginUser(req, res, next) {
     const { user, password } = req.body
+    console.log({user, password, loggedIn: req.session.loggedIn})
     if (req.session.loggedIn) {
-        next()
+        return next()
+
     }
     if (user === undefined || password === undefined) {
         return res.redirect("/login")
