@@ -1,40 +1,40 @@
-{{>header}}
 <div class="h-screen w-full flex overflow-hidden">
     <nav class="flex flex-col bg-gray-200 dark:bg-gray-900 w-64 px-12 pt-4 pb-6">
         <div class="mt-8">
-            <h2 class="mt-4 text-3xl dark:text-gray-300 font-bold capitalize">
+            <h2 class="mt-4 text-3xl dark:text-gray-300 font-semibold capitalize">
                 Bonjour Emilie
             </h2>
         </div>
 
         <ul class="mt-2 text-gray-600">
             <li class="mt-8">
-                <a href="/download" class="flex">
-                    <svg class="h-8 w-8 dark:text-gray-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                <a href="/download" class="flex items-center">
+                    <svg class="h-6 w-6 dark:text-gray-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                         stroke-linejoin="round">
                         <path d="M3 15v4c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2v-4M17 9l-5 5-5-5M12 12.8V2.5" />
                     </svg>
-                    <span class="ml-2 capitalize font-medium text-black
+                    <span class="ml-2 font-medium text-black
 						dark:text-gray-300">
-                        Télécharger les fichiers
+                        Tout télécharger
                     </span>
                 </a>
             </li>
         </ul>
+        <div class="mt-auto">
+            <a href="/disconnect">Se déconnecter</a>
+        </div>
     </nav>
     <main class="flex-1 flex flex-col bg-white dark:bg-gray-700 transition
 		duration-500 ease-in-out overflow-y-auto">
         <div class="mx-10 my-2">
-            <h2 class="my-4 text-4xl font-semibold dark:text-gray-400">
-                Liste des projets
-            </h2>
-            <div class="flex flew-wrap gap-2">
-                {{#repos}}
+            <h2 class="mt-4 mb-8 text-5xl font-bold dark:text-gray-400">Tous les projets <span class="text-3xl text-gray-400 font-light">({{repos.length}})</span></h2>
+            <div class="flex flew-wrap gap-8">
+                {{#each repos}}
                 <div class="flex flex-col text-gray-900 bg-gray-50 shadow-md p-4 rounded-lg w-56 h-56 items-stretch">
-                    <div class="flex w-full justify-between capitalize text-gray-600 text-sm font-light">
-                        <span class="flex-start">{{file}}</span>
-                        <span class="flex-end">{{date}}</span>
+                    <div class="flex w-full justify-between text-gray-600 text-sm font-light">
+                        <span class="flex-start">Fichier {{ fileExtension }}</span>
+                        <span class="flex-end">{{ dateRepo }}</span>
                     </div>
                     <div class="mt-4 flex capitalize text-xl font-semibold">
                         {{nickname}} {{name}}
@@ -58,16 +58,16 @@
                         </div>
                         <div class="inline-flex">
                             <a href="/uploads/{{file}}" target="_blank" rel="noopener noreferrer">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M3 15v4c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2v-4M17 9l-5 5-5-5M12 12.8V2.5" />
-                            </svg></a>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path d="M3 15v4c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2v-4M17 9l-5 5-5-5M12 12.8V2.5" />
+                                </svg></a>
                         </div>
                     </div>
                 </div>
-                {{/repos}}
+                {{/each}}
             </div>
         </div>
     </main>
 </div>
-{{>footer}}

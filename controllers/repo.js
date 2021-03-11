@@ -1,4 +1,7 @@
 import Repo from "../models/Repo.js"
+import zipFolder from "zip-a-folder"
+import fs from "fs"
+import path from "path"
 
 export function uploadRepo(req, res, next) {
     const { nickname, name, instagram, twitter } = req.body
@@ -21,15 +24,40 @@ export function uploadRepo(req, res, next) {
 }
 
 export function getAllRepos(req, res) {
-    Repo.find({}, (err, repos) => {
-        if (err) return res.status(500).send("Error")
-        console.log(repos)
-        res.render("dashboard", { repos })
-    })
-    // if (req.session.loggedIn) {
-    //     return res.render("dashboard")
-    // }
-    // TODO: remove direct acces dashboard
-    // res.redirect("/login")
-    // return res.render("dashboard")
+    if (req.session.loggedIn) {
+        Repo.find({}, (err, repos) => {
+            if (err) return res.status(500).send("Error")
+            let allRepos = []
+            repos.forEach((repo) => {
+                const date = new Date(repo.date)
+                const file = repo.file.split(".")
+                const el = repo
+                el.fileExtension = file[file.length - 1]
+                el.dateRepo = `${date.getDate()}/${
+                    date.getMonth() + 1
+                }/${date.getFullYear()}`
+                allRepos.push(el)
+            })
+            res.render("dashboard", { repos: allRepos })
+        })
+    } else {
+        res.redirect("/login")
+    }
+}
+
+export function zipFiles(req, res) {
+    const filename = `fonts-${Math.random().toString(36).substring(2)}.zip`
+    const __dirname = path.resolve()
+    console.log(path.join(__dirname, "../index.js"))
+    zipFolder.zipFolder(
+        path.join(__dirname, "/public/uploads"),
+        path.join(__dirname, `/public/repos/${filename}`),
+        (err) => {
+            if (err) {
+                console.log("Something went wrong!", err)
+                return res.send("Une erreur est survenue")
+            }
+        }
+    )
+    res.redirect(`/repos/${filename}`)
 }

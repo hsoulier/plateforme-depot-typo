@@ -1,6 +1,5 @@
-{{>header}}
 <form action="/submit-work" method="post" enctype="multipart/form-data"
-    class="bg-gray-100 shadow-md w-4/5 mx-auto p-8 rounded-lg">
+    class="bg-gray-100 shadow-md w-4/5 mx-auto p-8 rounded-lg max-w-xl">
     <h1 class="text-5xl font-bold text-gray-700 dark:text-gray-200 text-center mb-8">Dépose ton travail</h1>
     <div class="flex mb-4 w-full gap-2">
         <div class="flex-grow">
@@ -34,6 +33,5 @@
     <button type="submit"
         class="mt-8 w-full px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10">Envoyer
         mon travail</button>
-        <small class="text-sm text-gray-400 text-center mt-4 block">Les champs avec des * sont obligatoires</small>
+    <small class="text-sm text-gray-400 text-center mt-4 block">Les champs avec des * sont obligatoires</small>
 </form>
-{{>footer}}

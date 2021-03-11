@@ -6,10 +6,12 @@ import morgan from "morgan"
 import cors from "cors"
 import mongoose from "mongoose"
 import session from "express-session"
-import mustacheExpress from "mustache-express"
-import {uploadRepo, getAllRepos} from "./controllers/repo.js"
+import exphbs from "express-handlebars"
+import handlebars from "handlebars"
+import { uploadRepo, getAllRepos, zipFiles } from "./controllers/repo.js"
 import { loginUser, addingUser } from "./controllers/user.js"
 import upload from "./controllers/multer.js"
+import { allowInsecurePrototypeAccess } from "@handlebars/allow-prototype-access"
 
 dotenv.config()
 const app = express()
@@ -26,37 +28,56 @@ mongoose
         console.error(`connection error: ${err}`)
     })
 
+
 // Global middlewares
 app.set("trust proxy", 1)
 app.use(
     session({
-        secret: process.env.SECRET_SESSION,
-        name: "uniqueSessionID",
-        proxy: true,
         resave: true,
         saveUninitialized: true,
-        cookie: { secure: true },
+        secret: process.env.SECRET_SESSION,
+        cookie: { maxAge: 21600000 },
     })
 )
-app.use(json())
+app.use(bodyParser.urlencoded({ extended: false }))
 app.use(cors())
 app.use(express.static("public"))
 app.use(helmet())
 app.use(morgan("dev"))
-app.engine("html", mustacheExpress("views/partials", ".html"))
-app.set("view engine", "html")
-app.set("views", "views")
+app.set("view engine", "hbs")
+app.engine(
+    "hbs",
+    exphbs({
+        extname: "hbs",
+        partialsDir: "views/partials",
+        handlebars: allowInsecurePrototypeAccess(handlebars),
+    })
+)
 
+// Access the session as req.session
+app.get("/debug", function (req, res, next) {
+    if (req.session.views) {
+        req.session.views++
+        res.send(`${req.session.views}`)
+    } else {
+        req.session.views = 1
+        res.end("welcome to the session demo. refresh!")
+    }
+})
 app.get("/", (req, res) => {
     res.render("home", { home: true })
 })
+app.get("/disconnect", (req, res) => {
+    req.session.loggedIn = undefined
+    res.redirect("/")
+})
+app.get("/download", loginUser, zipFiles)
 app.post("/submit-work", upload, uploadRepo)
 app.post("/login-user", loginUser)
 app.get("/login", (req, res) => {
-    const error = req.session.error || false
-    res.render("login", { login: true, error: error })
+    res.render("login", { login: true, error: req.session.errorLogin })
 })
-app.get("/dashboard",getAllRepos)
+app.get("/dashboard", getAllRepos)
 
 app.listen(3005, () => {
     console.log("App listen on http://localhost:3005")

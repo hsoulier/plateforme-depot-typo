@@ -3,12 +3,26 @@ import bcrypt from "bcrypt"
 
 export async function loginUser(req, res, next) {
     const { user, password } = req.body
+    if (req.session.loggedIn) {
+        next()
+    }
+    if (user === undefined || password === undefined) {
+        return res.redirect("/login")
+    }
     try {
         User.findOne({ user }, (err, login) => {
+            if (err)
+                return res.statut(500).render("success", { success: false })
             bcrypt.compare(password, login.password, (err, result) => {
-                result
-                    ? res.render("dashboard")
-                    : res.render("success", { success: false })
+                if (err)
+                    return res.statut(500).render("success", { success: false })
+                if (result) {
+                    req.session.loggedIn = true
+                    res.redirect("/dashboard")
+                } else {
+                    req.session.errorLogin = "Mauvais identifiants"
+                    res.redirect("/login")
+                }
             })
         })
     } catch (e) {

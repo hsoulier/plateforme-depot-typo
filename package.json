@@ -10,6 +10,8 @@
     "tailwind": "postcss src/css/style.css -o public/css/style.css"
   },
   "dependencies": {
+    "@handlebars/allow-prototype-access": "^1.0.3",
+    "archiver": "^5.3.0",
     "bcrypt": "^5.0.1",
     "body-parser": "^1.19.0",
     "connect-flash": "^0.1.1",
@@ -17,7 +19,9 @@
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "express-handlebars": "^5.2.1",
     "express-session": "^1.17.1",
+    "handlebars": "^4.7.7",
     "helmet": "^4.4.1",
     "mongoose": "^5.11.19",
     "morgan": "^1.10.0",
@@ -26,7 +30,9 @@
     "passport": "^0.4.1",
     "passport-http": "^0.3.0",
     "passport-local": "^1.0.0",
-    "tailwindcss": "^2.0.3"
+    "tailwindcss": "^2.0.3",
+    "zip-a-folder": "^0.0.12",
+    "zip-dir": "^2.0.0"
   },
   "devDependencies": {
     "autoprefixer": "^10.2.5",
