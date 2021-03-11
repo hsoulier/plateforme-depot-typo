@@ -54,16 +54,6 @@ app.engine(
     })
 )
 
-// Access the session as req.session
-app.get("/debug", function (req, res, next) {
-    if (req.session.views) {
-        req.session.views++
-        res.send(`${req.session.views}`)
-    } else {
-        req.session.views = 1
-        res.end("welcome to the session demo. refresh!")
-    }
-})
 app.get("/", (req, res) => {
     res.render("home", { home: true })
 })

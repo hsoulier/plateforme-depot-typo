@@ -1,4 +1,5 @@
 # Dépôt de fichier
 ## TODO:
-- [] Style CSS
-- [] Minimize Tailwind Style file
+- [X] Minimize Tailwind Style file
+- [] Create real style 😅
+- [] Create User Page

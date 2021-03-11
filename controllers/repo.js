@@ -1,6 +1,5 @@
 import Repo from "../models/Repo.js"
 import zipFolder from "zip-a-folder"
-import fs from "fs"
 import path from "path"
 
 export function uploadRepo(req, res, next) {
