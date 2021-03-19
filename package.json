@@ -6,6 +6,7 @@
 	"type": "module",
 	"scripts": {
 		"test:zip": "node test/zipFolder.js",
+		"browser": "nodemon index.js & browser-sync start --proxy localhost:3005",
 		"dev": "nodemon index.js",
 		"start": "node index.js",
 		"tailwind": "postcss src/css/style.css -o public/css/style.css"
@@ -30,6 +31,8 @@
 	},
 	"devDependencies": {
 		"autoprefixer": "^10.2.5",
+		"browser-sync": "^2.26.14",
+		"connect-browser": "^0.0.4",
 		"nodemon": "^2.0.7",
 		"postcss": "^8.2.8",
 		"postcss-cli": "^8.3.1"
