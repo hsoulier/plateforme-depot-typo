@@ -18,7 +18,7 @@ const DB =
 	process.env.NODE_ENV !== "dev" ? process.env.DB_URI : process.env.DB_URI_DEV
 
 mongoose
-	.connect(DB, {
+	.connect(process.env.DB_URI, {
 		useNewUrlParser: true,
 		useUnifiedTopology: true,
 	})
