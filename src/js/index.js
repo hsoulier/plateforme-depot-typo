@@ -73,10 +73,6 @@ if (document.querySelector(".homepage")) {
 		},
 		1
 	)
-
-	window.addEventListener("scroll", () => {
-		console.log(document.querySelector("main").scrollTop)
-	})
 }
 
 if (document.querySelector(".change-word")) {

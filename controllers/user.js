@@ -32,13 +32,11 @@ export async function loginUser(req, res, next) {
 	// 	return res.redirect("/dashboard")
 	// }
 	const { user, password } = req.body
-	console.log({ user, password })
 	if (user === undefined || password === undefined) {
 		return res.redirect("/login")
 	}
 	try {
 		User.findOne({ user }, (err, login) => {
-			console.log(login)
 			if (err) return res.render("success", { success: false })
 			bcrypt.compare(password, login.password, (err, result) => {
 				if (err) return res.render("success", { success: false })
@@ -67,10 +65,8 @@ export async function updatePassword(req, res) {
 	if (method === "get") return res.render("update")
 	const { password, user } = req.body
 	bcrypt.hash(password, 10, async (err, hash) => {
-		const oldUser = await User.findOne({ user })
 		if (err) return res.render("success", { success: false })
 		const newUser = await User.updateOne({ user }, { password: hash })
-		console.log({ oldUser, newUser })
 	})
 	req.session.loggedIn = undefined
 	return res.render("login")
