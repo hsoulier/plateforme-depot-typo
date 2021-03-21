@@ -1,8 +1,8 @@
 import Repo from "../models/Repo.js"
 import zipFolder from "zip-a-folder"
 import archiver from "archiver"
+import fs, { promises as fsPromises } from "fs"
 import path from "path"
-import fs from "fs"
 
 export function uploadRepo(req, res, next) {
 	const { nickname, name, instagram, twitter, email, description } = req.body
@@ -61,21 +61,18 @@ export function zipFiles(req, res) {
 		)
 		res.redirect(`/repos/${filename}`)
 	})
-
 	output.on("end", () => {
-		console.log("Data has been drained")
 		res.redirect(`/repos/${filename}`)
 	})
 	archive.on("warning", (err) => {
 		if (err.code === "ENOENT") {
-			console.log(err)
+			return res.render("success", {success: false})
 		} else {
 			throw err
 		}
 	})
-
 	archive.on("error", (err) => {
-		res.status(500).send("Error")
+		res.status(500).render("success", { success: false })
 		throw err
 	})
 	archive.pipe(output)
@@ -83,18 +80,50 @@ export function zipFiles(req, res) {
 	archive.finalize()
 }
 
+export async function changeWord(req, res) {
+	jsonReader(path.resolve("./word.json"), (err, file) => {
+		if (err) return res.json({ message: "Une erreur est survenue" })
+		file.word = req.body["word"]
+		fs.writeFile(
+			path.resolve("./word.json"),
+			JSON.stringify(file),
+			(err) => {
+				if (err) return res.json({ message: "Une erreur est survenue" })
+			}
+		)
+	})
+	await fsPromises.rmdir(path.resolve("./public/uploads/"), {
+		recursive: true,
+	})
+	await fsPromises.mkdir(path.resolve("./public/uploads/"))
+	await Repo.deleteMany({})
+	return res.json({ message: "Mot mis à jour" })
+}
+
+function jsonReader(filePath, cb) {
+	fs.readFile(filePath, (err, fileData) => {
+		if (err) {
+			return cb && cb(err)
+		}
+		try {
+			const object = JSON.parse(fileData)
+			return cb && cb(null, object)
+		} catch (err) {
+			return cb && cb(err)
+		}
+	})
+}
+
 // With the Module Zip-A-Folder
 export function zipFilesZipFolder(req, res) {
 	const filename = `fonts-${Math.random().toString(36).substring(2)}.zip`
 	const __dirname = path.resolve()
-	console.log(path.join(__dirname, "../index.js"))
 	zipFolder.zipFolder(
 		path.join(__dirname, "/public/uploads"),
 		path.join(__dirname, `/public/repos/${filename}`),
 		(err) => {
 			if (err) {
-				console.log("Something went wrong!", err)
-				return res.send("Une erreur est survenue")
+				return res.render("success", { success: false })
 			}
 		}
 	)

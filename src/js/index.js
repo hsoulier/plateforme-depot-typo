@@ -5,7 +5,6 @@ import ConfettiGenerator from "confetti-js"
 import "splitting/dist/splitting.css"
 import "splitting/dist/splitting-cells.css"
 import Splitting from "splitting"
-import axios from "axios"
 
 if (document.querySelector(".success")) {
 	const confetti = new ConfettiGenerator({
@@ -105,14 +104,15 @@ if (document.querySelector(".change-word")) {
 		formChangeWord.style.setProperty("z-index", 20)
 	}
 
-	// From change word
+	// Form change word
 	document.querySelector(".change-word").addEventListener("click", () => {
-		changeText(`<h2 class="text-2xl text-center mb-8">Changer de mot</h1>
+		changeText(`<h2 class=" change-word-title-form text-2xl text-center mb-8">Changer de mot</h1>
 		 	<div class="mb-8">
 		 		<input type="text" name="word" placeholder="nouveau mot"
 		 			class="lowercase w-full py-2 placeholder-gray-700 border-b-2 border-black focus:outline-none focus:border-gray-400 transition-colors duration-200 ease-in-out"
 		 			required />
 		 	</div>
+			 <div class="mb-8 w-full py-2 flex"><svg class="mr-2" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>Attention en changeant de mot, tous les dépôts seront éffacés</div>
 		 	<div class="flex justify-center mt-4 submit-button">
 		 		<input value="valider" type="submit"
 		 			class="transition-colors duration-200 ease-in-out justify-center mx-auto px-8 py-2 border-2 border-black text-2xl font-bold text-white bg-black hover:bg-white hover:text-black md:px-10">
@@ -133,25 +133,38 @@ if (document.querySelector(".change-word")) {
 					const { message } = JSON.parse(res)
 					formChangeWord
 						.querySelector(".submit-button")
-						.insertAdjacentHTML("afterend", `<p class="text-2xl text-center mt-8">${message}</p>`)
+						.insertAdjacentHTML(
+							"afterend",
+							`<p class="text-2xl text-center mt-8">${message}</p>`
+						)
 				})
-				.catch((err) => console.log(err))
 		})
 	})
 
 	// Close popup window
-	formChangeWord.querySelector(".close").addEventListener("click", () => {
+	const closeButton = formChangeWord.querySelector(".close")
+	const closePopup = () => {
 		formChangeWord.style.setProperty("z-index", "-1")
-	})
+		if (
+			closeButton.parentNode.nextElementSibling.classList.contains(
+				"change-word-title-form"
+			)
+		) {
+			document.location.reload()
+		}
+	}
+	closeButton.addEventListener("click", closePopup)
 
 	// Get message from repos
 	if (document.querySelector(".description-repo")) {
 		const descriptions = document.querySelectorAll(".description-repo")
 		;[...descriptions].forEach((desc) => {
 			desc.addEventListener("click", () => {
-				const message = desc.dataset.message
-				console.log(decodeURI(message))
-				changeText(`<p class="text-center">${decodeURI(message)}</p>`)
+				changeText(
+					`<p class="text-center">${decodeURI(
+						desc.dataset.message
+					)}</p>`
+				)
 			})
 		})
 	}
