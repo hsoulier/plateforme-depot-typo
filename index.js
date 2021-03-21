@@ -8,10 +8,8 @@ import mongoose from "mongoose"
 import session from "express-session"
 import exphbs from "express-handlebars"
 import handlebars from "handlebars"
-import { uploadRepo, getAllRepos, zipFiles } from "./controllers/repo.js"
-import { loginUser, addingUser } from "./controllers/user.js"
-import upload from "./controllers/multer.js"
 import { allowInsecurePrototypeAccess } from "@handlebars/allow-prototype-access"
+import router from "./routes/index.js"
 
 dotenv.config()
 const app = express()
@@ -58,21 +56,10 @@ app.engine(
 	})
 )
 
-app.get("/", (req, res) => {
-	res.render("home", { home: true })
+app.use("/", router)
+app.all("*", (req, res) => {
+	res.render("404")
 })
-app.get("/disconnect", (req, res) => {
-	req.session.loggedIn = undefined
-	res.redirect("/")
-})
-app.get("/download", loginUser, zipFiles)
-app.post("/submit-work", upload, uploadRepo)
-app.post("/login-user", loginUser)
-app.get("/login", (req, res) => {
-	res.render("login", { login: true, error: req.session.errorLogin })
-})
-app.get("/dashboard", getAllRepos)
-app.get("/test", (req,res) => {res.render("success", {success: true})})
 app.listen(3005, () => {
 	console.log("App listen on http://localhost:3005")
 })

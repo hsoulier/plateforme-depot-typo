@@ -19,6 +19,19 @@
                     </span>
                 </a>
             </li>
+            <li class="mt-8">
+                <a class="change-word flex items-center cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="4 7 4 4 20 4 20 7"></polyline>
+                        <line x1="9" y1="20" x2="15" y2="20"></line>
+                        <line x1="12" y1="4" x2="12" y2="20"></line>
+                    </svg>
+                    <span class="ml-2 text-base">
+                        Changer le mot
+                    </span>
+                </a>
+            </li>
         </ul>
         <div class="mt-auto">
             <a class="lowercase text-black bg-white border-white border-2 text-xl px-4 py-2 hover:bg-black hover:text-white transition-colors duration-300 ease-in-out"
@@ -106,4 +119,19 @@
             </div>
         </div>
     </main>
+</div>
+
+
+<div
+    class="form-change-word z-n1 absolute top-1/2 left-1/2 w-full h-screen transform -translate-x-1/2 -translate-y-1/2 flex items-center justify-center">
+    <form action="/change-word" method="post" class="relative w-4/5 mx-auto max-w-xl">
+        <div
+            class="absolute p-8 top-0 left-0 w-full h-full border-black border-4 bg-black transform translate-x-4 translate-y-4">
+        </div>
+        <div class="container-element relative px-8 py-4 bg-white border-black border-4">
+            <div class="flex justify-end">
+                <div class="cursor-pointer close block text-2xl ml-auto mr-0 p-2">x</div>
+            </div>
+        </div>
+    </form>
 </div>
