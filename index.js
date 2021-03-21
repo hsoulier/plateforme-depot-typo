@@ -15,9 +15,7 @@ dotenv.config()
 const app = express()
 
 const DB =
-	process.env.NODE_ENV !== "dev"
-		? process.env.DB_URI
-		: "mongodb://localhost:27017/?readPreference=primary&appname=MongoDB%20Compass&ssl=false"
+	process.env.NODE_ENV !== "dev" ? process.env.DB_URI : process.env.DB_URI_DEV
 
 mongoose
 	.connect(DB, {

@@ -5,7 +5,12 @@ import {
 	zipFiles,
 	changeWord,
 } from "../controllers/repo.js"
-import { loginUser, checkLogin, addingUser } from "../controllers/user.js"
+import {
+	loginUser,
+	checkLogin,
+	addingUser,
+	updatePassword,
+} from "../controllers/user.js"
 import upload from "../controllers/multer.js"
 import fs from "fs"
 import path from "path"
@@ -27,10 +32,10 @@ router.post("/login-user", loginUser)
 router.get("/download", checkLogin, zipFiles)
 router.post("/change-word", checkLogin, changeWord)
 router.get("/dashboard", checkLogin, getAllRepos)
+router.all("/dashboard/update-password", checkLogin, updatePassword)
 router.get("/login", (req, res) => {
 	res.render("login", { login: true, error: req.session.errorLogin })
 })
-router.post("/add-user", addingUser)
-
+// router.post("/add-user", addingUser)
 
 export default router

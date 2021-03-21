@@ -169,3 +169,19 @@ if (document.querySelector(".change-word")) {
 		})
 	}
 }
+
+if (document.querySelector(".update-password")) {
+	const form = document.querySelector(".update-password form")
+	const error = form.querySelector(".error")
+	const passwConf = form.querySelector("input[name=passwordConf]")
+	const passw = form.querySelector("input[name=password]")
+	;[...document.querySelectorAll("input[type=password]")].forEach((input) => {
+		input.addEventListener("input", () => {
+			if (passw.value === passwConf.value) {
+				error.textContent = ""
+			} else {
+				error.textContent = "Les mots de passes ne correspondent pas"
+			}
+		})
+	})
+}
