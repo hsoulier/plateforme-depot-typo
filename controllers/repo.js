@@ -4,10 +4,21 @@ import archiver from "archiver"
 import fs, { promises as fsPromises } from "fs"
 import path from "path"
 
+const delAt = (str) => {
+	if (str[0] === "@") {
+		return str.substring(1)
+	} else {
+		return str
+	}
+}
+
 export function uploadRepo(req, res, next) {
 	const { nickname, name, instagram, twitter, email, description } = req.body
-	const socialNetwork = { instagram, twitter }
-	console.log({ nickname, name, socialNetwork, file: req.file })
+	const socialNetwork = {
+		instagram: delAt(instagram),
+		twitter: delAt(twitter),
+	}
+	console.log({ nickname, name, socialNetwork, email, file: req.file })
 	try {
 		const repo = new Repo({
 			nickname,
@@ -66,7 +77,7 @@ export function zipFiles(req, res) {
 	})
 	archive.on("warning", (err) => {
 		if (err.code === "ENOENT") {
-			return res.render("success", {success: false})
+			return res.render("success", { success: false })
 		} else {
 			throw err
 		}
