@@ -73,6 +73,20 @@ if (document.querySelector(".homepage")) {
 		},
 		1
 	)
+
+	document
+		.querySelector("input[name=file]")
+		.addEventListener("change", (e) => {
+			const button = document.querySelector("button[type=submit]")
+			button.disabled = true
+			button.textContent = "chargement"
+			button.classList.add("opacity-20", "cursor-wait")
+			setTimeout(() => {
+				button.disabled = false
+				button.textContent = "déposer"
+				button.classList.remove("opacity-20", "cursor-wait")
+			}, 2000)
+		})
 }
 
 if (document.querySelector(".change-word")) {
