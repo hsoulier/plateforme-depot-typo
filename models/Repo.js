@@ -7,7 +7,7 @@ const repoSchema = new Schema({
     description: String,
     date: { type: Date, default: Date.now },
     socialNetwork: Object,
-    file: String,
+    files: Array,
 })
 
 export default model("repo", repoSchema)

@@ -1,7 +1,5 @@
 <div
     class="loader z-20 absolute h-full w-full text-white text-3xl text-center flex items-center flex-col justify-center">
-    {{!-- <div class="bg-gray-400 absolute z-0 left-0 top-0 w-full h-full stripe"></div>
-    <div class="bg-gray-700 absolute z-0 left-0 top-0 w-full h-full stripe"></div> --}}
     <div class="bg-black absolute z-0 left-0 top-0 w-full h-full stripe"></div>
     <p class="mb-3 font-light overflow-hidden" data-splitting>
         mot actuel
@@ -22,34 +20,35 @@
                 <div class="flex mb-8 w-full gap-6">
                     <div class="flex-grow">
                         <input type="text" name="nickname" placeholder="prénom *"
-                            class="lowercase w-full py-2 placeholder-gray-700 border-b-2 border-black focus:outline-none focus:border-gray-400 transition-colors duration-200 ease-in-out"
+                            class="w-full py-2 placeholder-gray-700 border-b-2 border-black focus:outline-none focus:border-gray-400 transition-colors duration-200 ease-in-out"
                             required />
                     </div>
                     <div class="flex-grow">
                         <input type="text" name="name" placeholder="nom *"
-                            class="lowercase w-full py-2 placeholder-gray-700 border-b-2 border-black focus:outline-none focus:border-gray-400 transition-colors duration-200 ease-in-out"
+                            class="w-full py-2 placeholder-gray-700 border-b-2 border-black focus:outline-none focus:border-gray-400 transition-colors duration-200 ease-in-out"
                             required />
                     </div>
                 </div>
                 <div class="mb-8">
                     <input type="email" name="email" placeholder="email *"
-                        class="lowercase w-full py-2 placeholder-gray-700 border-b-2 border-black focus:outline-none focus:border-gray-400 transition-colors duration-200 ease-in-out"
+                        class="w-full py-2 placeholder-gray-700 border-b-2 border-black focus:outline-none focus:border-gray-400 transition-colors duration-200 ease-in-out"
                         required />
                 </div>
                 <div class="flex mb-8 w-full gap-6">
                     <div class="flex-grow">
                         <input type="text" name="instagram" placeholder="@ instagram"
-                            class="lowercase w-full py-2 placeholder-gray-700 border-b-2 border-black focus:outline-none focus:border-gray-400 transition-colors duration-200 ease-in-out" />
+                            class="w-full py-2 placeholder-gray-700 border-b-2 border-black focus:outline-none focus:border-gray-400 transition-colors duration-200 ease-in-out" />
                     </div>
                     <div class="flex-grow">
                         <input type="text" name="twitter" placeholder="@ twitter"
-                            class="lowercase w-full py-2 placeholder-gray-700 border-b-2 border-black focus:outline-none focus:border-gray-400 transition-colors duration-200 ease-in-out" />
+                            class="w-full py-2 placeholder-gray-700 border-b-2 border-black focus:outline-none focus:border-gray-400 transition-colors duration-200 ease-in-out" />
                     </div>
                 </div>
                 <textarea name="description" rows="3"
                     class="w-full py-2 placeholder-gray-700 border-b-2 border-black focus:outline-none focus:border-gray-400 transition-colors duration-200 ease-in-out mb-8"
                     style="min-height: 3rem;" placeholder="petite description (si besoin)"></textarea>
-                <input type="file" name="file" label="Déposer le fichier <br/>ou cliquez ici" is="drop-files" />
+                <input type="file" name="files" multiple label="Déposer le fichier <br/>ou cliquez ici"
+                    is="drop-files" />
                 <div class="flex justify-center mt-4">
                     <button type="submit"
                         class="transition-colors duration-200 ease-in-out justify-center mx-auto px-8 py-2 border-2 border-black text-2xl font-bold text-white bg-black hover:bg-white hover:text-black md:px-10">déposer</button>

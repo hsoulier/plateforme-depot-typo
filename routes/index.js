@@ -36,6 +36,6 @@ router.all("/dashboard/update-password", checkLogin, updatePassword)
 router.get("/login", (req, res) => {
 	res.render("login", { login: true, error: req.session.errorLogin })
 })
-// router.post("/add-user", addingUser)
+router.post("/add-user", addingUser)
 
 export default router

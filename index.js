@@ -14,9 +14,6 @@ import router from "./routes/index.js"
 dotenv.config()
 const app = express()
 
-const DB =
-	process.env.NODE_ENV !== "dev" ? process.env.DB_URI : process.env.DB_URI_DEV
-
 mongoose
 	.connect(process.env.DB_URI, {
 		useNewUrlParser: true,

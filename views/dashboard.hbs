@@ -63,7 +63,6 @@
                         </div>
                         <div class="flex flex-col relative p-4 bg-white border-black border-2 h-full">
                             <div class="flex w-full justify-between text-gray-600 text-sm font-light">
-                                <span class="flex-start uppercase">format {{fileExtension}}</span>
                                 <span class="flex-end">{{ dateRepo }}</span>
                             </div>
                             <div class="flex items-center capitalize text-2xl font-semibold flex-1 flex-wrap">
@@ -105,14 +104,26 @@
                                     {{/if}}
                                 </div>
                                 <div class="inline-flex gap-2">
-                                    <a href="/uploads/{{file}}" target="_blank" rel="noopener noreferrer">
+                                    <div class="relative dl-btn">
+                                        <div
+                                            class="list-files absolute top-0 left-0 bg-white border-2 border-black p-2 w-56 hidden">
+                                            <span
+                                                class="text-right inline-block cursor-pointer close-list-files text-2xl ml-auto mr-0 p-2">x</span>
+                                            {{#each files as |file|}}
+                                                <div class="mt-1">
+                                                    <a href="/uploads/current/{{file}}" target="_blank"
+                                                        rel="noopener noreferrer">Fichier {{@index}} -
+                                                        {{lookup ../exts @index}}</a>
+                                                </div>
+                                            {{/each}}
+                                        </div>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                            stroke-linecap="round" stroke-linejoin="round">
+                                            stroke-linecap="round" stroke-linejoin="round" class="cursor-pointer">
                                             <path
                                                 d="M3 15v4c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2v-4M17 9l-5 5-5-5M12 12.8V2.5" />
                                         </svg>
-                                    </a>
+                                    </div>
                                     <a href="mailto:{{email}}">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
                                             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
