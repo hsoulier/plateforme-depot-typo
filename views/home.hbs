@@ -1,7 +1,5 @@
 <div
     class="loader z-20 absolute h-full w-full text-white text-3xl text-center flex items-center flex-col justify-center">
-    {{!-- <div class="bg-gray-400 absolute z-0 left-0 top-0 w-full h-full stripe"></div>
-    <div class="bg-gray-700 absolute z-0 left-0 top-0 w-full h-full stripe"></div> --}}
     <div class="bg-black absolute z-0 left-0 top-0 w-full h-full stripe"></div>
     <p class="mb-3 font-light overflow-hidden" data-splitting>
         mot actuel
@@ -23,20 +21,18 @@
                     <div class="flex-grow">
                         <input type="text" name="nickname" placeholder="prénom *"
                             class="w-full py-2 placeholder-gray-700 border-b-2 border-black focus:outline-none focus:border-gray-400 transition-colors duration-200 ease-in-out"
-                            {{!-- required /> --}}
-                        />
+                            required />
                     </div>
                     <div class="flex-grow">
                         <input type="text" name="name" placeholder="nom *"
-                            class="w-full py-2 placeholder-gray-700 border-b-2 border-black focus:outline-none focus:border-gray-400 transition-colors duration-200 ease-in-out" />
-                        {{!-- required /> --}}
+                            class="w-full py-2 placeholder-gray-700 border-b-2 border-black focus:outline-none focus:border-gray-400 transition-colors duration-200 ease-in-out"
+                            required />
                     </div>
                 </div>
                 <div class="mb-8">
                     <input type="email" name="email" placeholder="email *"
                         class="w-full py-2 placeholder-gray-700 border-b-2 border-black focus:outline-none focus:border-gray-400 transition-colors duration-200 ease-in-out"
-                        {{!-- required /> --}}
-                    />
+                        required />
                 </div>
                 <div class="flex mb-8 w-full gap-6">
                     <div class="flex-grow">
