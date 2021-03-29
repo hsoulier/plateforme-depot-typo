@@ -18,7 +18,12 @@ export function uploadRepo(req, res, next) {
 		instagram: delAt(instagram),
 		twitter: delAt(twitter),
 	}
-	console.log({ nickname, name, socialNetwork, email, file: req.file })
+	console.log(req.files)
+	const files = []
+	req.files.forEach((file) => {
+		files.push(file.filename)
+	})
+	console.log({ nickname, name, socialNetwork, email, files })
 	try {
 		const repo = new Repo({
 			nickname,
@@ -26,7 +31,7 @@ export function uploadRepo(req, res, next) {
 			email,
 			description,
 			socialNetwork,
-			file: req.file.filename,
+			files,
 		})
 		repo.save((err) => {
 			if (err) return res.render("success", { success: false })
@@ -44,15 +49,20 @@ export function getAllRepos(req, res) {
 			let allRepos = []
 			repos.forEach((repo) => {
 				const date = new Date(repo.date)
-				const file = repo.file.split(".")
 				const el = repo
+				const exts = []
+				;[...repo.files].forEach((file) => {
+					const arrFile = file.split(".")
+					exts.push(arrFile[arrFile.length - 1])
+				})
+				el.exts = exts
 				el.message = encodeURI(repo.description)
-				el.fileExtension = file[file.length - 1]
 				el.dateRepo = `${date.getDate()}/${
 					date.getMonth() + 1
 				}/${date.getFullYear()}`
 				allRepos.push(el)
 			})
+			console.log(allRepos)
 			res.render("dashboard", { repos: allRepos })
 		})
 	} else {
@@ -87,13 +97,15 @@ export function zipFiles(req, res) {
 		throw err
 	})
 	archive.pipe(output)
-	archive.directory(path.join(__dirname, "/public/uploads/"), false)
+	archive.directory(path.join(__dirname, "/public/uploads/current/"), false)
 	archive.finalize()
 }
 
 export async function changeWord(req, res) {
+	let oldWord = null
 	jsonReader(path.resolve("./word.json"), (err, file) => {
 		if (err) return res.json({ message: "Une erreur est survenue" })
+		oldWord = file.word
 		file.word = req.body["word"]
 		fs.writeFile(
 			path.resolve("./word.json"),
@@ -103,9 +115,13 @@ export async function changeWord(req, res) {
 			}
 		)
 	})
-	await fsPromises.rmdir(path.resolve("./public/uploads/"), {
-		recursive: true,
-	})
+	await fsPromises.rename(
+		path.resolve(`./public/uploads/current`),
+		path.resolve(`./public/uploads/${oldWord}`)
+	)
+	// await fsPromises.rmdir(path.resolve("./public/uploads/"), {
+	// 	recursive: true,
+	// })
 	await fsPromises.mkdir(path.resolve("./public/uploads/"))
 	await Repo.deleteMany({})
 	return res.json({ message: "Mot mis à jour" })

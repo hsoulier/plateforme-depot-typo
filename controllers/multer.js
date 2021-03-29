@@ -1,8 +1,7 @@
 import multer, { diskStorage } from "multer"
-
 const storage = multer.diskStorage({
 	destination: (req, file, cb) => {
-		cb(null, "public/uploads")
+		cb(null, "public/uploads/current")
 	},
 	filename: (req, file, cb) => {
 		const { name, nickname } = req.body
@@ -17,4 +16,4 @@ const storage = multer.diskStorage({
 	},
 })
 
-export default multer({ storage }).single("file")
+export default multer({ storage }).array("files", 10)
