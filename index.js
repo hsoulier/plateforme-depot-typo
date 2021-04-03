@@ -1,15 +1,14 @@
 import dotenv from "dotenv"
-import express, { json } from "express"
-import bodyParser from "body-parser"
+import express, { json, urlencoded } from "express"
 import helmet from "helmet"
 import morgan from "morgan"
 import cors from "cors"
 import mongoose from "mongoose"
-import session from "express-session"
 import exphbs from "express-handlebars"
 import handlebars from "handlebars"
 import { allowInsecurePrototypeAccess } from "@handlebars/allow-prototype-access"
-import router from "./routes/index.js"
+import routerIndex from "./routes/index.js"
+import routerUser from "./routes/user.js"
 
 dotenv.config()
 const app = express()
@@ -27,16 +26,8 @@ mongoose
 	})
 
 // Global middlewares
-app.set("trust proxy", 1)
-app.use(
-	session({
-		resave: true,
-		saveUninitialized: true,
-		secret: process.env.SECRET_SESSION,
-		cookie: { maxAge: 21600000 },
-	})
-)
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(json())
+app.use(urlencoded({ extended: true }))
 app.use(cors())
 app.use(express.static("public"))
 app.use(helmet())
@@ -51,7 +42,8 @@ app.engine(
 	})
 )
 
-app.use("/", router)
+app.use("/", routerIndex)
+app.use("/user", routerUser)
 app.all("*", (req, res) => {
 	res.render("404")
 })
