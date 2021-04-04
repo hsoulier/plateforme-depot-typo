@@ -10,6 +10,7 @@ import { allowInsecurePrototypeAccess } from "@handlebars/allow-prototype-access
 import routerIndex from "./routes/index.js"
 import routerUser from "./routes/user.js"
 import routerPopulate from "./utils/populate.js"
+import routerTest from "./utils/routerTest.js"
 
 dotenv.config()
 const app = express()
@@ -45,6 +46,7 @@ app.engine(
 
 app.use("/populate", routerPopulate)
 app.use("/user", routerUser)
+app.use("/test", routerTest)
 app.use("/", routerIndex)
 app.all("*", (req, res) => {
 	res.render("404")

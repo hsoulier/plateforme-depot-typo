@@ -7,7 +7,7 @@ import path from "path"
 
 const production = !process.env.ROLLUP_WATCH
 export default {
-	input: "src/js/index.js",
+	input: "assets/js/index.js",
 	output: {
 		file: "public/js/app.js",
 		format: "iife",
@@ -16,7 +16,7 @@ export default {
 		json(),
 		postcss({
 			config: {
-				path: path.resolve("/postcss.config.js"),
+				path: path.resolve("./config/postcss.config.js"),
 			},
 			name: "style",
 			extensions: [".css"],

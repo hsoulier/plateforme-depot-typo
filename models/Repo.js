@@ -6,8 +6,8 @@ const optString = {
 	required: false,
 }
 const repoSchema = new Schema({
-	user: ObjectId,
-	word: ObjectId,
+	userId: ObjectId,
+	wordId: ObjectId,
 	name: optString,
 	email: optString,
 	description: optString,

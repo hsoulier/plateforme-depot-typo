@@ -12,11 +12,7 @@ router.get("/user", async (req, res) => {
 		for (let i = 0; i < 5; i++) {
 			const pwd = faker.internet.password()
 			const password = await hashPassword(pwd)
-			let repos = []
 			const email = faker.internet.email()
-			for (let j = 0; j < Math.round(Math.random() * 10); j++) {
-				repos[j] = faker.datatype.number()
-			}
 			console.log({ email, pwd })
 			data = [
 				...data,
@@ -28,7 +24,6 @@ router.get("/user", async (req, res) => {
 						twitter: faker.name.firstName(),
 						instagram: faker.name.firstName(),
 					},
-					repos,
 					password,
 				},
 			]
@@ -72,11 +67,12 @@ router.get("/repo", async (req, res) => {
 		const idsUsers = users.map((user) => user._id)
 		let repos = []
 		idsWords.forEach((idWord) => {
-			const n = Math.round(Math.random() * 10)
+			// const n = Math.round(Math.random() * 10)
+			const n = 10
 			for (let i = 0; i < n; i++) {
 				const repo = {
-					word: idWord,
-					user:
+					wordId: idWord,
+					userId:
 						idsUsers[
 							Math.round(Math.random() * (idsUsers.length - 1))
 						],
@@ -93,6 +89,5 @@ router.get("/repo", async (req, res) => {
 		return res.json({ error })
 	}
 })
-
 
 export default router

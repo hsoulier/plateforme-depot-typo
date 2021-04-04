@@ -4,11 +4,11 @@
 	"license": "MIT",
 	"type": "module",
 	"scripts": {
-		"watch": "rollup --config --watch",
-		"build": "rollup --config",
+		"watch": "rollup --config ./config/rollup.js --watch",
+		"build": "rollup --config ./config/rollup.js",
 		"dev": "nodemon index.js",
 		"start": "node index.js",
-		"tailwind": "postcss src/css/style.css -o public/css/style.css"
+		"tailwind": "postcss assets/css/style.css -o public/css/style.css --config ./config/postcss.config.js"
 	},
 	"dependencies": {
 		"@grafikart/drop-files-element": "^1.0.9",

@@ -6,7 +6,6 @@ const userSchema = new Schema({
 	password: String,
 	isAdmin: Boolean,
 	socials: Object,
-	repos: Array,
 })
 
 export default model("user", userSchema)
