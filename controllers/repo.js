@@ -1,5 +1,5 @@
 import Repo from "../models/Repo.js"
-import zipFolder from "zip-a-folder"
+import faker from "faker"
 import archiver from "archiver"
 import { formatBytes, jsonReader, delAt } from "../utils/index.js"
 import fs, { promises as fsPromises } from "fs"
@@ -115,20 +115,4 @@ export async function changeWord(req, res) {
 	await fsPromises.mkdir(path.resolve("./public/uploads/current"))
 	// await Repo.deleteMany({})
 	return res.json({ message: "Mot mis à jour" })
-}
-
-// With the Module Zip-A-Folder
-export function zipFilesZipFolder(req, res) {
-	const filename = `fonts-${Math.random().toString(36).substring(2)}.zip`
-	const __dirname = path.resolve()
-	zipFolder.zipFolder(
-		path.join(__dirname, "/public/uploads"),
-		path.join(__dirname, `/public/repos/${filename}`),
-		(err) => {
-			if (err) {
-				return res.render("success", { success: false })
-			}
-		}
-	)
-	res.redirect(`/repos/${filename}`)
 }

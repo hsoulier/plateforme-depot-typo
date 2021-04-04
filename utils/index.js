@@ -1,4 +1,5 @@
 import fs from "fs"
+import bcrypt from "bcrypt"
 
 export function jsonReader(filePath, cb) {
 	fs.readFile(filePath, (err, fileData) => {
@@ -32,4 +33,14 @@ export const delAt = (str) => {
 	} else {
 		return str
 	}
+}
+
+export const hashPassword = async (password, saltRounds = 10) => {
+	try {
+		const salt = await bcrypt.genSalt(saltRounds)
+		return await bcrypt.hash(password, salt)
+	} catch (error) {
+		console.log(error)
+	}
+	return null
 }

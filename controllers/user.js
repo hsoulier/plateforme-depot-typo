@@ -1,6 +1,5 @@
 import bcrypt from "bcrypt"
 import User from "../models/User.js"
-import faker from "faker"
 
 export function checkLogin(req, res, next) {
 	return res.redirect("/login")
@@ -53,47 +52,5 @@ export async function addingUser(req, res) {
 		} catch (e) {
 			res.render("success", { success: false })
 		}
-	})
-}
-
-const hashPassword = async (password, saltRounds = 10) => {
-	try {
-		const salt = await bcrypt.genSalt(saltRounds)
-		return await bcrypt.hash(password, salt)
-	} catch (error) {
-		console.log(error)
-	}
-	return null
-}
-
-export async function populateUser(req, res) {
-	let data = []
-	for (let i = 0; i < 20; i++) {
-		const pwd = faker.internet.password()
-		const password = await hashPassword(pwd)
-		let repos = []
-		const email = faker.internet.email()
-		for (let j = 0; j < Math.round(Math.random() * 10); j++) {
-			repos[j] = faker.datatype.number()
-		}
-		console.log({ email, pwd })
-		data = [
-			...data,
-			{
-				name: faker.name.findName(),
-				email,
-				isAdmin: false,
-				socials: {
-					twitter: faker.name.firstName(),
-					instagram: faker.name.firstName(),
-				},
-				repos,
-				password,
-			},
-		]
-	}
-	User.insertMany(data, function (error, docs) {
-		if (error) return res.json({ error })
-		res.json({ message: "Success Populate", result: docs })
 	})
 }
