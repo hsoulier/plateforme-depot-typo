@@ -1,15 +1,18 @@
 @import url("https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;800&display=swap");
 $colors: (
-	"black": #1F1E1E,
-	"white": #F3F3F3,
-	"primary": #F8923A,
+	"black": #1f1e1e,
+	"white": #f3f3f3,
+	"primary": #f8923a,
 	"secondary": #83a5d8,
 );
 $space: 0.5rem;
 $font: "Lexend", sans-serif;
+$ease: 0.3s ease-in-out;
 :root {
 	@each $color, $value in $colors {
 		--clr-#{$color}: #{$value};
 	}
 	--base-space: #{$space};
+	--font: #{$font};
+	--ease: #{$ease};
 }

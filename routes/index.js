@@ -1,8 +1,10 @@
 import { Router } from "express"
-import { home } from "../controllers/global.js"
+import { home, getRules } from "../controllers/global.js"
 const router = Router()
 
-router.get("/", home)
-router.get("/login", home)
+router.get("/", getRules, home)
+router.get("/login", getRules, (req, res) => {
+	res.render("login", { text: req.rules })
+})
 
 export default router

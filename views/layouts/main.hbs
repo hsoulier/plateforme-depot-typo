@@ -2,9 +2,10 @@
 {{>navbar}}
 {{>rules}}
 <main class="{{@exphbs.view}}-content" data-barba="container" data-barba-namespace="{{@exphbs.view}}">
-	<div class="{{@exphbs.view}}__container">
+	<div class="{{@exphbs.view}}-content__container">
 		{{returnButton @exphbs.view}}
 		{{{body}}}
+		<span id="loader"></span>
 	</div>
 </main>
 {{>footer}}

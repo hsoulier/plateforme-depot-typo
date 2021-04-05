@@ -5628,22 +5628,38 @@
       // to protect from tree shaking
   gsapWithCSS.core.Tween;
 
-  // import ConfettiGenerator from "confetti-js"
-
   class App {
   	constructor() {
   		this.create();
   	}
   	create() {
   		console.log("Hello");
-  		this.initBarba();
+  		window.addEventListener("load", () => {
+  			this.initBarba();
+  		});
   	}
   	initBarba() {
+  		barba_umd.hooks.afterLeave(({ current }) => {
+  			if (current.namespace === "home") {
+  				window.removeEventListener("resize", this.resizeWord);
+  			}
+  		});
+  		barba_umd.hooks.beforeEnter(({ next }) => {
+  			if (next.namespace === "home") {
+  				this.resizeWord();
+  				window.addEventListener("resize", this.resizeWord);
+  			}
+  		});
   		barba_umd.init({
-  			debug: true,
+  			debug: false,
   			transitions: [
   				{
   					name: "Default Transition",
+  					once: ({ next }) =>
+  						gsapWithCSS.from(document.querySelectorAll(".nav__link a"), {
+  							stagger: 0.2,
+  							y: "110%",
+  						}),
   					leave: ({ current }) =>
   						gsapWithCSS.to(current.container, { opacity: 0, y: 50 }),
   					enter({ next }) {
@@ -5656,8 +5672,35 @@
   			],
   		});
   	}
+  	resizeWord() {
+  		const word = document.querySelector(".current-word h1") || false;
+  		const w = document.querySelector("[data-barba=container]").clientWidth;
+  		const result = (w * 1.35) / word.textContent.length;
+  		word.style.setProperty("font-size", `calc(${result} * 1px)`);
+  	}
   }
 
-  new App();
+  window.addEventListener("DOMContentLoaded", () => {
+  	new App();
+  });
+
+  // TODO: Implement Loader
+  const loader = document.getElementById("loader");
+  const max = 100;
+  let lastN = 0;
+  const steps = 20;
+  const getNumberBetween = (low, high) => {
+  	const n = Math.floor(Math.random() * steps + low);
+  	return n > high ? high : n
+  };
+  const intervalLoader = setInterval(() => {
+  	lastN = getNumberBetween(lastN, max);
+
+  	loader.innerHTML = lastN;
+
+  	if (lastN >= max) {
+  		window.clearInterval(intervalLoader);
+  	}
+  }, 100);
 
 }());

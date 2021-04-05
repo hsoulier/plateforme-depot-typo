@@ -1,0 +1,55 @@
+.login-content {
+	&__container {
+		height: 100%;
+		width: 100%;
+		display: flex;
+		align-items: center;
+		flex-direction: column;
+	}
+}
+
+.login-form {
+	place-content: center;
+	align-self: stretch;
+	justify-content: center;
+	@extend %mx-auto;
+	height: 60%;
+	display: grid;
+	grid-template: repeat(4, min-content) / 1fr;
+	place-items: center;
+	gap: space(2);
+	h2 {
+		font-size: space(5);
+		text-transform: uppercase;
+		font-weight: 600;
+		margin-bottom: space(2);
+	}
+}
+
+.form-control {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: space(0.5);
+}
+
+input[type="email"],
+input[type="password"] {
+	border: none;
+	border-bottom: 2px solid var(--clr-primary);
+	padding: space(0.5);
+	background-color: transparent;
+	font: inherit;
+	color: inherit;
+}
+
+button[type="submit"] {
+	background-color: var(--clr-primary);
+	padding: space(1) space(2);
+	font: 600 space(3) / 1 var(--font);
+	border: 2px solid var(--clr-primary);
+	transition: color var(--ease), background-color var(--ease);
+	&:hover {
+		background-color: transparent;
+		color: var(--clr-primary);
+	}
+}
