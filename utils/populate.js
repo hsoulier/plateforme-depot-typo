@@ -3,6 +3,7 @@ import { hashPassword } from "./index.js"
 import Word from "../models/Word.js"
 import User from "../models/User.js"
 import Repo from "../models/Repo.js"
+import Text from "../models/Text.js"
 import faker from "faker"
 const router = Router()
 
@@ -57,6 +58,17 @@ router.get("/word", async (req, res) => {
 	} catch (error) {
 		console.log(error)
 		return res.json({ error })
+	}
+})
+router.get("/text", async (req, res) => {
+	try {
+		const inserted = await Text.create({
+			type: "Règles",
+			content: faker.lorem.paragraph(5),
+		})
+		return res.json(inserted)
+	} catch (error) {
+		return res.json(error)
 	}
 })
 router.get("/repo", async (req, res) => {

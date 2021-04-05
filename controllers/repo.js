@@ -1,5 +1,4 @@
 import Repo from "../models/Repo.js"
-import faker from "faker"
 import archiver from "archiver"
 import { formatBytes, jsonReader, delAt } from "../utils/index.js"
 import fs, { promises as fsPromises } from "fs"

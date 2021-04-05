@@ -45,8 +45,8 @@ app.engine(
 )
 
 app.use("/populate", routerPopulate)
-app.use("/user", routerUser)
 app.use("/test", routerTest)
+app.use("/user", routerUser)
 app.use("/", routerIndex)
 app.all("*", (req, res) => {
 	res.render("404")

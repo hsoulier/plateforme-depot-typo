@@ -1,11 +1,13 @@
 import resolve from "@rollup/plugin-node-resolve"
 import commonjs from "@rollup/plugin-commonjs"
 import { terser } from "rollup-plugin-terser"
-import postcss from "rollup-plugin-postcss"
+import scss from "rollup-plugin-scss"
 import json from "@rollup/plugin-json"
-import path from "path"
+import sass from "sass"
 
 const production = !process.env.ROLLUP_WATCH
+
+console.log(production)
 export default {
 	input: "assets/js/index.js",
 	output: {
@@ -14,16 +16,14 @@ export default {
 	},
 	plugins: [
 		json(),
-		postcss({
-			config: {
-				path: path.resolve("./config/postcss.config.js"),
-			},
-			name: "style",
-			extensions: [".css"],
-			extract: true,
+		scss({
+			output: "./public/css/style.css",
+			outputStyle: production ? "compressed" : "expanded",
+			failOnError: true,
+			runtime: sass,
 		}),
-		resolve({ browser: true }), // tells Rollup how to find date-fns in node_modules
-		commonjs(), // converts date-fns to ES modules
-		production && terser(), // minify, but only in production
+		resolve({ browser: true }),
+		commonjs(),
+		production && terser(),
 	],
 }

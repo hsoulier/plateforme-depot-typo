@@ -24,14 +24,30 @@ router.get("/user/:id?", async (req, res) => {
 					as: "repos",
 				},
 			},
+			// {
+			// 	$unset: [
+			// 		"repos.userId",
+			// 		"repos.__v",
+			// 		"repos.files",
+			// 		"repos.wordId",
+			// 		"repos.date",
+			// 	],
+			// },
 			{
-				$unset: [
-					"repos.userId",
-					"repos.__v",
-					"repos.files",
-					"repos.wordId",
-					"repos.date",
-				],
+				$addFields: {
+					reposId: {
+						$map: {
+							input: "$repos",
+							as: "r",
+							in: {
+								$unwind: {
+									path: "r._id",
+									preserveNullAndEmptyArrays: false,
+								},
+							},
+						},
+					},
+				},
 			},
 			// {
 			// 	$lookup: {

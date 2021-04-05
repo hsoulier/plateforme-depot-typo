@@ -1,4 +1,4 @@
-// import "../css/style.css"
+import "../style/main.scss"
 import "@grafikart/drop-files-element"
 import ConfettiGenerator from "confetti-js"
 import home from "./animations/home.js"
