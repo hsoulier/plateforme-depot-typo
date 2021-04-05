@@ -36,6 +36,6 @@ body:not(dashboard) {
 	}
 }
 main {
-	grid-area: content;
 	padding: space(4);
+	grid-area: content;
 }

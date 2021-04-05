@@ -1,5 +1,10 @@
 {{>header}}
 {{>navbar}}
 {{>rules}}
-{{{body}}}
+<main class="{{@exphbs.view}}-content" data-barba="container" data-barba-namespace="{{@exphbs.view}}">
+	<div class="{{@exphbs.view}}__container">
+		{{returnButton @exphbs.view}}
+		{{{body}}}
+	</div>
+</main>
 {{>footer}}
