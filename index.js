@@ -27,6 +27,17 @@ mongoose
 		console.error(`connection error: ${err}`)
 	})
 
+const hbs = exphbs.create({
+	extname: "hbs",
+	partialsDir: "views/partials",
+	handlebars: allowInsecurePrototypeAccess(handlebars),
+	helpers: {
+		loud: function (a) {
+			return `allez ${a} Hello`
+		},
+	},
+})
+
 // Global middlewares
 app.use(json())
 app.use(urlencoded({ extended: true }))
@@ -35,14 +46,7 @@ app.use(express.static("public"))
 app.use(helmet())
 app.use(morgan("dev"))
 app.set("view engine", "hbs")
-app.engine(
-	"hbs",
-	exphbs({
-		extname: "hbs",
-		partialsDir: "views/partials",
-		handlebars: allowInsecurePrototypeAccess(handlebars),
-	})
-)
+app.engine("hbs", hbs.engine)
 
 app.use("/populate", routerPopulate)
 app.use("/test", routerTest)

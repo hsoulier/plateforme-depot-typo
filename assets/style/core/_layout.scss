@@ -1,0 +1,41 @@
+body:not(dashboard) {
+	display: grid;
+	min-height: 700px;
+	height: 100vh;
+	grid-template: max-content auto / min-content auto;
+	grid-template-areas:
+		"navbar content"
+		"rules content";
+}
+.rules {
+	background-color: var(--clr-white);
+	color: var(--clr-black);
+	padding: space(4);
+	&__container {
+		display: grid;
+		height: 100%;
+		grid-template: 1fr min-content / 1fr;
+	}
+	&__rules {
+		h3 {
+			text-transform: uppercase;
+			font-weight: 500;
+			font-size: space(3);
+			margin-bottom: space(3);
+		}
+		p {
+			line-height: 1.5;
+		}
+	}
+	&__footer {
+		text-transform: uppercase;
+		font-weight: 300;
+		li + li {
+			margin-top: space(1);
+		}
+	}
+}
+main {
+	grid-area: content;
+	padding: space(4);
+}

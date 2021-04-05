@@ -17,6 +17,7 @@ export default {
 	plugins: [
 		json(),
 		scss({
+			watch: "./assets/style",
 			output: "./public/css/style.css",
 			outputStyle: production ? "compressed" : "expanded",
 			failOnError: true,

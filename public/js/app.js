@@ -642,7 +642,7 @@
   function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
 
   /*!
-   * GSAP 3.6.0
+   * GSAP 3.6.1
    * https://greensock.com
    *
    * @license Copyright 2008-2021, GreenSock. All rights reserved.
@@ -1129,7 +1129,6 @@
       tween._from && (ratio = 1 - ratio);
       tween._time = 0;
       tween._tTime = tTime;
-      suppressEvents || _callback(tween, "onStart");
       pt = tween._pt;
 
       while (pt) {
@@ -1580,6 +1579,7 @@
       _interrupt = function _interrupt(animation) {
     _removeFromParent(animation);
 
+    animation.scrollTrigger && animation.scrollTrigger.kill(false);
     animation.progress() < 1 && _callback(animation, "onInterrupt");
     return animation;
   },
@@ -2710,7 +2710,8 @@
             !suppressEvents && this.parent && _callback(this, "onRepeat");
             this.vars.repeatRefresh && !isYoyo && (this.invalidate()._lock = 1);
 
-            if (prevTime !== this._time || prevPaused !== !this._ts) {
+            if (prevTime && prevTime !== this._time || prevPaused !== !this._ts || this.vars.onRepeat && !this.parent && !this._act) {
+              // if prevTime is 0 and we render at the very end, _time will be the end, thus won't match. So in this edge case, prevTime won't match _time but that's okay. If it gets killed in the onRepeat, eject as well.
               return this;
             }
 
@@ -2722,7 +2723,6 @@
               this._lock = 2;
               prevTime = rewinding ? dur : -0.0001;
               this.render(prevTime, true);
-              this.vars.repeatRefresh && !isYoyo && this.invalidate();
             }
 
             this._lock = 0;
@@ -2755,7 +2755,7 @@
           prevTime = 0; // upon init, the playhead should always go forward; someone could invalidate() a completed timeline and then if they restart(), that would make child tweens render in reverse order which could lock in the wrong starting values if they build on each other, like tl.to(obj, {x: 100}).to(obj, {x: 0}).
         }
 
-        !prevTime && (time || !dur && totalTime >= 0) && !suppressEvents && _callback(this, "onStart");
+        !prevTime && time && !suppressEvents && _callback(this, "onStart");
 
         if (time >= prevTime && totalTime >= 0) {
           child = this._first;
@@ -3031,7 +3031,7 @@
           onStartParams = _vars.onStartParams,
           immediateRender = _vars.immediateRender,
           tween = Tween.to(tl, _setDefaults({
-        ease: "none",
+        ease: vars.ease || "none",
         lazy: false,
         immediateRender: false,
         time: endTime,
@@ -3439,6 +3439,8 @@
             time && (tween._zTime = time);
             return; //we skip initialization here so that overwriting doesn't occur until the tween actually begins. Otherwise, if you create several immediateRender:true tweens of the same target/properties to drop into a Timeline, the last one created would overwrite the first ones because they didn't get placed into the timeline yet before the first render occurs and kicks in overwriting.
           }
+        } else if (autoRevert === false) {
+          tween._startAt = 0;
         }
       } else if (runBackwards && dur) {
         //from() tweens must be handled uniquely: their beginning values must be rendered but we don't want overwriting to occur yet (when time is still 0). Wait until the tween actually begins before doing all the routines like overwriting. At that time, we should render at the END of the tween to ensure that things initialize correctly (remember, from() tweens go backwards)
@@ -4440,7 +4442,7 @@
     }
   }, _buildModifierPlugin("roundProps", _roundModifier), _buildModifierPlugin("modifiers"), _buildModifierPlugin("snap", snap)) || _gsap; //to prevent the core plugins from being dropped via aggressive tree shaking, we must include them in the variable declaration in this way.
 
-  Tween.version = Timeline.version = gsap.version = "3.6.0";
+  Tween.version = Timeline.version = gsap.version = "3.6.1";
   _coreReady = 1;
 
   if (_windowExists$1()) {
@@ -4448,7 +4450,7 @@
   }
 
   /*!
-   * CSSPlugin 3.6.0
+   * CSSPlugin 3.6.1
    * https://greensock.com
    *
    * Copyright 2008-2021, GreenSock. All rights reserved.
@@ -4462,7 +4464,6 @@
       _docElement,
       _pluginInitted,
       _tempDiv,
-      _tempDivStyler,
       _recentSetterPlugin,
       _windowExists = function _windowExists() {
     return typeof window !== "undefined";
@@ -4558,7 +4559,7 @@
       _tempDiv = _createElement("div") || {
         style: {}
       };
-      _tempDivStyler = _createElement("div");
+      _createElement("div");
       _transformProp = _checkPropPrefix(_transformProp);
       _transformOriginProp = _transformProp + "Origin";
       _tempDiv.style.cssText = "border-width:0;line-height:0;position:absolute;padding:0"; //make sure to override certain properties that may contaminate measurements, in case the user has overreaching style sheets.
@@ -5185,7 +5186,7 @@
     matrix = _getMatrix(target, cache.svg);
 
     if (cache.svg) {
-      t1 = !cache.uncache && target.getAttribute("data-svg-origin");
+      t1 = !cache.uncache && !uncache && target.getAttribute("data-svg-origin");
 
       _applySVGOrigin(target, t1 || origin, !!t1 || cache.originIsAbsolute, cache.smooth !== false, matrix);
     }
@@ -5211,7 +5212,7 @@
         rotation = a || b ? _atan2(b, a) * _RAD2DEG : 0; //note: if scaleX is 0, we cannot accurately measure rotation. Same for skewX with a scaleY of 0. Therefore, we default to the previously recorded value (or zero if that doesn't exist).
 
         skewX = c || d ? _atan2(c, d) * _RAD2DEG + rotation : 0;
-        skewX && (scaleY *= Math.cos(skewX * _DEG2RAD));
+        skewX && (scaleY *= Math.abs(Math.cos(skewX * _DEG2RAD)));
 
         if (cache.svg) {
           x -= xOrigin - (xOrigin * a + yOrigin * c);
@@ -5543,11 +5544,19 @@
 
     return pt;
   },
+      _assign = function _assign(target, source) {
+    // Internet Explorer doesn't have Object.assign(), so we recreate it here.
+    for (var p in source) {
+      target[p] = source[p];
+    }
+
+    return target;
+  },
       _addRawTransformPTs = function _addRawTransformPTs(plugin, transforms, target) {
     //for handling cases where someone passes in a whole transform string, like transform: "scale(2, 3) rotate(20deg) translateY(30em)"
-    var style = _tempDivStyler.style,
-        startCache = target._gsap,
+    var startCache = _assign({}, target._gsap),
         exclude = "perspective,force3D,transformOrigin,svgOrigin",
+        style = target.style,
         endCache,
         p,
         startValue,
@@ -5556,13 +5565,22 @@
         endNum,
         startUnit,
         endUnit;
-    style.cssText = getComputedStyle(target).cssText + ";position:absolute;display:block;"; //%-based translations will fail unless we set the width/height to match the original target (and padding/borders can affect it)
 
-    style[_transformProp] = transforms;
+    if (startCache.svg) {
+      startValue = target.getAttribute("transform");
+      target.setAttribute("transform", "");
+      style[_transformProp] = transforms;
+      endCache = _parseTransform(target, 1);
 
-    _doc.body.appendChild(_tempDivStyler);
+      _removeProperty(target, _transformProp);
 
-    endCache = _parseTransform(_tempDivStyler, 1);
+      target.setAttribute("transform", startValue);
+    } else {
+      startValue = getComputedStyle(target)[_transformProp];
+      style[_transformProp] = transforms;
+      endCache = _parseTransform(target, 1);
+      style[_transformProp] = startValue;
+    }
 
     for (p in _transformProps) {
       startValue = startCache[p];
@@ -5574,14 +5592,14 @@
         endUnit = getUnit(endValue);
         startNum = startUnit !== endUnit ? _convertToUnit(target, p, startValue, endUnit) : parseFloat(startValue);
         endNum = parseFloat(endValue);
-        plugin._pt = new PropTween(plugin._pt, startCache, p, startNum, endNum - startNum, _renderCSSProp);
+        plugin._pt = new PropTween(plugin._pt, endCache, p, startNum, endNum - startNum, _renderCSSProp);
         plugin._pt.u = endUnit || 0;
 
         plugin._props.push(p);
       }
     }
 
-    _doc.body.removeChild(_tempDivStyler);
+    _assign(endCache, startCache);
   }; // handle splitting apart padding, margin, borderWidth, and borderRadius into their 4 components. Firefox, for example, won't report borderRadius correctly - it will only do borderTopLeftRadius and the other corners. We also want to handle paddingTop, marginLeft, borderRightWidth, etc.
 
 
@@ -5672,8 +5690,14 @@
           //CSS variable
           startValue = (getComputedStyle(target).getPropertyValue(p) + "").trim();
           endValue += "";
-          startUnit = getUnit(startValue);
-          endUnit = getUnit(endValue);
+          _colorExp.lastIndex = 0;
+
+          if (!_colorExp.test(startValue)) {
+            // colors don't have units
+            startUnit = getUnit(startValue);
+            endUnit = getUnit(endValue);
+          }
+
           endUnit ? startUnit !== endUnit && (startValue = _convertToUnit(target, p, startValue, endUnit) + endUnit) : startUnit && (endValue += startUnit);
           this.add(style, "setProperty", startValue, endValue, index, targets, 0, 0, p);
         } else if (type !== "undefined") {
