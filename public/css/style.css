@@ -313,3 +313,46 @@ button[type="submit"]:hover {
 .nav__link a {
   display: inline-block;
 }
+
+.loader-screen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--clr-black);
+  color: var(--clr-white);
+}
+
+.loader-screen__container {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  height: calc(100% - 0.75rem);
+  padding: 2rem;
+}
+
+.loader-screen__wrapper {
+  overflow: hidden;
+  background-color: transparent;
+  display: inline-block;
+}
+
+.loader-screen__wrapper span {
+  display: inline-block;
+  font-size: 2.5rem;
+  font-weight: 300;
+}
+
+.loader-screen__wrapper #loader {
+  font-size: 8rem;
+  font-weight: 600;
+}
+
+.loader-screen__progress {
+  height: 0.75rem;
+  width: 100%;
+  transform: translate3d(-100%, 0, 0);
+  transition: transform 45ms linear;
+  background-color: var(--clr-primary);
+}

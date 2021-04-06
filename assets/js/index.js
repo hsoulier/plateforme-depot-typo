@@ -2,13 +2,13 @@ import "../style/main.scss"
 import "@grafikart/drop-files-element"
 import barba from "@barba/core"
 import gsap from "gsap"
+import { enteringAnim } from "./animations/global.js"
 
 class App {
 	constructor() {
 		this.create()
 	}
 	create() {
-		console.log("Hello")
 		window.addEventListener("load", () => {
 			this.initBarba()
 		})
@@ -30,11 +30,9 @@ class App {
 			transitions: [
 				{
 					name: "Default Transition",
-					once: ({ next }) =>
-						gsap.from(document.querySelectorAll(".nav__link a"), {
-							stagger: 0.2,
-							y: "110%",
-						}),
+					once: (data) => {
+						enteringAnim()
+					},
 					leave: ({ current }) =>
 						gsap.to(current.container, { opacity: 0, y: 50 }),
 					enter({ next }) {
@@ -58,22 +56,3 @@ class App {
 window.addEventListener("DOMContentLoaded", () => {
 	const app = new App()
 })
-
-// TODO: Implement Loader
-const loader = document.getElementById("loader")
-const max = 100
-let lastN = 0
-const steps = 20
-const getNumberBetween = (low, high) => {
-	const n = Math.floor(Math.random() * steps + low)
-	return n > high ? high : n
-}
-const intervalLoader = setInterval(() => {
-	lastN = getNumberBetween(lastN, max)
-
-	loader.innerHTML = lastN
-
-	if (lastN >= max) {
-		window.clearInterval(intervalLoader)
-	}
-}, 100)

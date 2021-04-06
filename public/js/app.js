@@ -5628,12 +5628,62 @@
       // to protect from tree shaking
   gsapWithCSS.core.Tween;
 
+  const DOM = {
+  	loader: {
+  		loaderWrap: document.querySelector(".loader-screen"),
+  		percent: document.getElementById("loader"),
+  		bar: document.querySelector(".loader-screen__progress"),
+  		spans: document.querySelectorAll(".loader-screen span"),
+  	},
+  	navbar: {
+  		links: document.querySelectorAll(".nav__link a"),
+  	},
+  	rules: {},
+  	content: {},
+  };
+
+  let a = {
+  	load: 0,
+  };
+  const enteringAnim = () => {
+  	const tl = gsapWithCSS.timeline();
+  	tl.to(a, {
+  		load: 100,
+  		duration: 2,
+  		ease: "power5.inOut",
+  		onUpdate: () => {
+  			DOM.loader.percent.innerHTML = Math.floor(a.load);
+  			DOM.loader.bar.style.setProperty(
+  				"transform",
+  				`translate3d(calc(${Math.floor(a.load) - 100} * 1%), 0, 0)`
+  			);
+  		},
+  	})
+  		.to(
+  			DOM.loader.loaderWrap,
+  			{
+  				opacity: 0,
+  				duration: 0.4,
+  				onComplete: () => {
+  					DOM.loader.loaderWrap.style.setProperty(
+  						"pointer-events",
+  						"none"
+  					);
+  				},
+  			},
+  			"+=.5"
+  		)
+  		.from(DOM.navbar.links, {
+  			y: "120%",
+  			stagger: 0.2,
+  		});
+  };
+
   class App {
   	constructor() {
   		this.create();
   	}
   	create() {
-  		console.log("Hello");
   		window.addEventListener("load", () => {
   			this.initBarba();
   		});
@@ -5655,11 +5705,9 @@
   			transitions: [
   				{
   					name: "Default Transition",
-  					once: ({ next }) =>
-  						gsapWithCSS.from(document.querySelectorAll(".nav__link a"), {
-  							stagger: 0.2,
-  							y: "110%",
-  						}),
+  					once: (data) => {
+  						enteringAnim();
+  					},
   					leave: ({ current }) =>
   						gsapWithCSS.to(current.container, { opacity: 0, y: 50 }),
   					enter({ next }) {
@@ -5683,24 +5731,5 @@
   window.addEventListener("DOMContentLoaded", () => {
   	new App();
   });
-
-  // TODO: Implement Loader
-  const loader = document.getElementById("loader");
-  const max = 100;
-  let lastN = 0;
-  const steps = 20;
-  const getNumberBetween = (low, high) => {
-  	const n = Math.floor(Math.random() * steps + low);
-  	return n > high ? high : n
-  };
-  const intervalLoader = setInterval(() => {
-  	lastN = getNumberBetween(lastN, max);
-
-  	loader.innerHTML = lastN;
-
-  	if (lastN >= max) {
-  		window.clearInterval(intervalLoader);
-  	}
-  }, 100);
 
 }());

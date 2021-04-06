@@ -7,7 +7,6 @@ import sass from "sass"
 
 const production = !process.env.ROLLUP_WATCH
 
-console.log(production)
 export default {
 	input: "assets/js/index.js",
 	output: {
