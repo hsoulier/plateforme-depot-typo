@@ -2,3 +2,8 @@
     <h2>Mot à typographier</h2>
     <h1>{{word.word}}</h1>
 </div>
+<div class="gallery">
+    {{#each imgs as |img|}}
+        <div class="gallery__figure"><img src="{{img}}" alt="Gallerie d'image" class="gallery__image"></div>
+    {{/each}}
+</div>

@@ -47,9 +47,12 @@ body:not(dashboard) {
 	}
 }
 main {
+	position: relative;
 	overflow-x: hidden;
-	padding: space(4);
 	grid-area: content;
+	& > [class*="__container"]:not(.home-content__container) {
+		padding: space(4);
+	}
 }
 
 .return-home {

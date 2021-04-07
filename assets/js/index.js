@@ -3,6 +3,7 @@ import "@grafikart/drop-files-element"
 import barba from "@barba/core"
 import gsap from "gsap"
 import { enteringAnim } from "./animations/global.js"
+import GridImage from "./home/gridImage.js"
 
 class App {
 	constructor() {
@@ -30,8 +31,11 @@ class App {
 			transitions: [
 				{
 					name: "Default Transition",
-					once: (data) => {
+					once: ({ next }) => {
 						enteringAnim()
+						// if (next.namespace === "home") {
+						// 	const a = new GridImage()
+						// }
 					},
 					leave: ({ current }) =>
 						gsap.to(current.container, { opacity: 0, y: 50 }),
@@ -55,4 +59,22 @@ class App {
 
 window.addEventListener("DOMContentLoaded", () => {
 	const app = new App()
+
+	new GridImage()
+	document.documentElement.classList.remove("no-js")
+	document.documentElement.classList.add("js")
+
+	const images = document.querySelectorAll(".gallery__figure > img")
+	let imagesIndex = 0
+	Array.from(images).forEach((element) => {
+		const image = new Image()
+		image.src = element.src
+		image.onload = (_) => {
+			imagesIndex += 1
+			if (imagesIndex === images.length) {
+				document.documentElement.classList.remove("loading")
+				document.documentElement.classList.add("loaded")
+			}
+		}
+	})
 })

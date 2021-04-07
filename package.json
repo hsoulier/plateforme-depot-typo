@@ -27,6 +27,9 @@
 		"mongoose": "^5.11.19",
 		"morgan": "^1.10.0",
 		"multer": "^1.4.2",
+		"normalize-wheel": "^1.0.1",
+		"ogl": "^0.0.68",
+		"rollup-plugin-glslify": "^1.2.0",
 		"splitting": "^1.0.6"
 	},
 	"devDependencies": {

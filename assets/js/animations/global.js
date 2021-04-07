@@ -41,7 +41,7 @@ export const enteringAnim = () => {
 			DOM.loader.loaderWrap,
 			{
 				opacity: 0,
-				duration: 0.4,
+				duration: 0.3,
 				onComplete: () => {
 					DOM.loader.loaderWrap.style.setProperty(
 						"pointer-events",
@@ -70,9 +70,9 @@ export const enteringAnim = () => {
 			DOM.navbar.links,
 			{
 				y: "120%",
-				stagger: 0.2,
+				stagger: 0.18,
 			},
-			"-=.25"
+			"-=.3"
 		)
 		.from(
 			DOM.rules.content,
@@ -81,7 +81,7 @@ export const enteringAnim = () => {
 				x: -50,
 				stagger: 0.18,
 			},
-			"-=.25"
+			"-=.4"
 		)
 		.from(
 			DOM.content,
@@ -90,6 +90,6 @@ export const enteringAnim = () => {
 				stagger: 0.18,
 				ease: "linear",
 			},
-			"-=.2"
+			"-=.5"
 		)
 }
