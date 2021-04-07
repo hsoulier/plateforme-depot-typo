@@ -4,14 +4,21 @@ body:not(dashboard) {
 	max-width: 100vw;
 	min-height: 700px;
 	height: 100vh;
-	grid-template: max-content auto / min-content 1fr;
+	grid-template: space(32) auto / min-content 1fr;
 	grid-template-areas:
 		"navbar content"
 		"rules content";
 }
 .rules {
-	background-color: var(--clr-white);
-	color: var(--clr-black);
+	overflow: hidden;
+	position: relative;
+	.v-line {
+		@extend %v-line;
+		transform-origin: bottom;
+	}
+	.h-line {
+		@extend %h-line;
+	}
 	padding: space(4);
 	&__container {
 		display: grid;
@@ -19,6 +26,7 @@ body:not(dashboard) {
 		grid-template: 1fr min-content / 1fr;
 	}
 	&__rules {
+		overflow: hidden;
 		h3 {
 			text-transform: uppercase;
 			font-weight: 500;
@@ -30,6 +38,7 @@ body:not(dashboard) {
 		}
 	}
 	&__footer {
+		overflow: hidden;
 		text-transform: uppercase;
 		font-weight: 300;
 		li + li {

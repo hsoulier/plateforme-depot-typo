@@ -1,4 +1,5 @@
 import gsap from "gsap"
+
 const DOM = {
 	loader: {
 		loaderWrap: document.querySelector(".loader-screen"),
@@ -8,11 +9,17 @@ const DOM = {
 	},
 	navbar: {
 		links: document.querySelectorAll(".nav__link a"),
+		vLine: document.querySelector(".nav .v-line"),
 	},
-	rules: {},
-	content: {},
+	rules: {
+		hLine: document.querySelector(".rules .h-line"),
+		vLine: document.querySelector(".rules .v-line"),
+		content: document.querySelectorAll(
+			".rules__rules > *, .rules__footer > *"
+		),
+	},
+	content: document.querySelectorAll(".current-word > *"),
 }
-
 let a = {
 	load: 0,
 }
@@ -20,7 +27,7 @@ export const enteringAnim = () => {
 	const tl = gsap.timeline()
 	tl.to(a, {
 		load: 100,
-		duration: 2,
+		duration: 1.5,
 		ease: "power5.inOut",
 		onUpdate: () => {
 			DOM.loader.percent.innerHTML = Math.floor(a.load)
@@ -42,10 +49,47 @@ export const enteringAnim = () => {
 					)
 				},
 			},
-			"+=.5"
+			"+=.75"
 		)
-		.from(DOM.navbar.links, {
-			y: "120%",
-			stagger: 0.2,
+		.from(DOM.rules.hLine, {
+			x: "-100%",
 		})
+		.from(DOM.rules.vLine, {
+			y: "-100%",
+			duration: 0.8,
+		})
+		.from(
+			DOM.navbar.vLine,
+			{
+				y: "100%",
+				duration: 0.8,
+			},
+			"-=.8"
+		)
+		.from(
+			DOM.navbar.links,
+			{
+				y: "120%",
+				stagger: 0.2,
+			},
+			"-=.25"
+		)
+		.from(
+			DOM.rules.content,
+			{
+				opacity: 0,
+				x: -50,
+				stagger: 0.18,
+			},
+			"-=.25"
+		)
+		.from(
+			DOM.content,
+			{
+				opacity: 0,
+				stagger: 0.18,
+				ease: "linear",
+			},
+			"-=.2"
+		)
 }

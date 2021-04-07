@@ -1,11 +1,12 @@
 .loader-screen {
 	position: absolute;
+	z-index: 999;
 	top: 0;
 	left: 0;
 	right: 0;
 	bottom: 0;
-	background-color: var(--clr-black);
-	color: var(--clr-white);
+	background-color: var(--clr-white);
+	color: var(--clr-black);
 	&__container {
 		display: flex;
 		align-items: flex-end;

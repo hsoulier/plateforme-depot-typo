@@ -109,8 +109,8 @@ section {
 }
 body {
 	font: 1rem/1 $font;
-	color: var(--clr-white);
-	background-color: var(--clr-black);
+	color: var(--clr-black);
+	background-color: var(--clr-white);
 }
 ol,
 ul {
@@ -136,4 +136,24 @@ a {
 	color: inherit;
 	font-weight: inherit;
 	display: inline-block;
+}
+
+%line {
+	content: "";
+	position: absolute;
+	background-color: var(--clr-black);
+}
+%v-line {
+	@extend %line;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	width: 3px;
+}
+%h-line {
+	@extend %line;
+	top: 0;
+	right: 0;
+	left: 0;
+	height: 3px;
 }
