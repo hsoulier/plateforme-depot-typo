@@ -111,6 +111,9 @@ body {
 	font: 1rem/1 $font;
 	color: var(--clr-black);
 	background-color: var(--clr-white);
+	-moz-osx-font-smoothing: grayscale;
+	-webkit-font-smoothing: antialiased;
+	overscroll-behavior-y: none;
 }
 ol,
 ul {

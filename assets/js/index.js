@@ -3,11 +3,12 @@ import "@grafikart/drop-files-element"
 import barba from "@barba/core"
 import gsap from "gsap"
 import { enteringAnim } from "./animations/global.js"
-import GridImage from "./home/gridImage.js"
+import SliderImage from "./home/index.js"
 
 class App {
 	constructor() {
 		this.create()
+		this.loco = null
 	}
 	create() {
 		window.addEventListener("load", () => {
@@ -18,12 +19,14 @@ class App {
 		barba.hooks.afterLeave(({ current }) => {
 			if (current.namespace === "home") {
 				window.removeEventListener("resize", this.resizeWord)
+				this.loco.getScroll().destroy()
 			}
 		})
 		barba.hooks.beforeEnter(({ next }) => {
 			if (next.namespace === "home") {
 				this.resizeWord()
 				window.addEventListener("resize", this.resizeWord)
+				this.loco = new SliderImage()
 			}
 		})
 		barba.init({
@@ -33,9 +36,9 @@ class App {
 					name: "Default Transition",
 					once: ({ next }) => {
 						enteringAnim()
-						// if (next.namespace === "home") {
-						// 	const a = new GridImage()
-						// }
+						if (next.namespace === "home") {
+							this.loco = new SliderImage()
+						}
 					},
 					leave: ({ current }) =>
 						gsap.to(current.container, { opacity: 0, y: 50 }),
@@ -59,22 +62,4 @@ class App {
 
 window.addEventListener("DOMContentLoaded", () => {
 	const app = new App()
-
-	new GridImage()
-	document.documentElement.classList.remove("no-js")
-	document.documentElement.classList.add("js")
-
-	const images = document.querySelectorAll(".gallery__figure > img")
-	let imagesIndex = 0
-	Array.from(images).forEach((element) => {
-		const image = new Image()
-		image.src = element.src
-		image.onload = (_) => {
-			imagesIndex += 1
-			if (imagesIndex === images.length) {
-				document.documentElement.classList.remove("loading")
-				document.documentElement.classList.add("loaded")
-			}
-		}
-	})
 })

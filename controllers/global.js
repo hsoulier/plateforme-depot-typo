@@ -1,9 +1,17 @@
 import Text from "../models/Text.js"
 import Word from "../models/Word.js"
 import { statSync, readdirSync } from "fs"
-import { resolve, join } from "path"
+import { join } from "path"
 
-let files = []
+const shuffleArray = (array) => {
+	for (var i = array.length - 1; i > 0; i--) {
+		var j = Math.floor(Math.random() * (i + 1))
+		var temp = array[i]
+		array[i] = array[j]
+		array[j] = temp
+	}
+}
+let imgs = []
 const isDirectory = (path) => statSync(path).isDirectory()
 const getDirectories = (path) =>
 	readdirSync(path)
@@ -25,8 +33,8 @@ const getFilesRecursively = (path) => {
 }
 
 export async function home(req, res) {
-	files = getFilesRecursively(`./public/uploads`)
-	let imgs = files
+	imgs = getFilesRecursively(`./public/uploads`)
+	imgs = imgs
 		.map((img) =>
 			img.includes("public") ? img.replace("public", "") : img
 		)
@@ -37,6 +45,7 @@ export async function home(req, res) {
 					.split(".")
 					[file.split(".").length - 1].match(/jp(e)?g|png/g)
 		)
+	shuffleArray(imgs)
 	console.log(imgs)
 	const word = await Word.findOne({ isCurrent: true })
 	return res.render("home", { text: req.rules, word, imgs })

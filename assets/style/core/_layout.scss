@@ -53,6 +53,9 @@ main {
 	& > [class*="__container"]:not(.home-content__container) {
 		padding: space(4);
 	}
+	& > [class*="__container"] {
+		position: relative;
+	}
 }
 
 .return-home {

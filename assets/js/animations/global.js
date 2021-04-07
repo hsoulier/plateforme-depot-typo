@@ -92,4 +92,5 @@ export const enteringAnim = () => {
 			},
 			"-=.5"
 		)
+	return tl
 }
