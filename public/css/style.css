@@ -178,11 +178,6 @@ a {
   height: 3px;
 }
 
-.login-form {
-  margin-left: auto;
-  margin-right: auto;
-}
-
 body:not(dashboard) {
   display: grid;
   width: 100vw;
@@ -251,6 +246,19 @@ main > [class*="__container"] {
 .return-home {
   height: 4rem;
   align-self: flex-start;
+  transition: color var(--ease);
+}
+
+.return-home svg {
+  transition: transform var(--ease);
+}
+
+.return-home:hover {
+  color: var(--clr-primary);
+}
+
+.return-home:hover svg {
+  transform: translateX(-0.75rem);
 }
 
 .home-content h1,
@@ -315,41 +323,53 @@ main > [class*="__container"] {
   flex-direction: column;
 }
 
-.login-form {
-  place-content: center;
-  align-self: stretch;
-  justify-content: center;
-  height: 60%;
-  display: grid;
-  grid-template: repeat(4, min-content)/1fr;
-  place-items: center;
-  gap: 1rem;
+.login-content .form-control {
+  width: 75%;
+  position: relative;
+  margin: 3rem auto 1rem;
 }
 
-.login-form h2 {
-  font-size: 2.5rem;
-  text-transform: uppercase;
-  font-weight: 600;
-  margin-bottom: 1rem;
+.login-content .form-control:first-child {
+  margin-top: 4.5rem;
 }
 
-.form-control {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 0.25rem;
+.login-content .form-control label {
+  display: inline-block;
+  color: inherit;
+  font-size: 1.125rem;
+  transition: all var(--ease);
+  z-index: 10;
+  padding-left: 0.25rem;
+  position: relative;
+  top: -1.75rem;
 }
 
-input[type="email"],
-input[type="password"] {
+.login-content .form-control input {
   border: none;
   border-bottom: 2px solid var(--clr-primary);
   padding: 0.25rem;
   background-color: transparent;
   font: inherit;
   color: inherit;
+  width: 100%;
+  position: relative;
+  display: inline-block;
+  outline: none;
+  z-index: 20;
 }
 
-button[type="submit"] {
+.login-content .form-control input[type="email"]:valid ~ label,
+.login-content .form-control input[type="email"]:focus ~ label,
+.login-content .form-control input[type="email"]:not(:placeholder-shown):not(:focus):invalid ~ label,
+.login-content .form-control input[type="password"]:not(:placeholder-shown):not(:focus):invalid ~ label,
+.login-content .form-control input[type="password"]:valid ~ label,
+.login-content .form-control input[type="password"]:focus ~ label {
+  top: -4rem;
+}
+
+.login-content .form-control button[type="submit"] {
+  outline: none;
+  cursor: pointer;
   background-color: var(--clr-primary);
   padding: 0.5rem 1rem;
   font: 600 1.5rem var(--font);
@@ -357,9 +377,91 @@ button[type="submit"] {
   transition: color var(--ease), background-color var(--ease);
 }
 
-button[type="submit"]:hover {
+.login-content .form-control button[type="submit"]:hover {
   background-color: transparent;
   color: var(--clr-primary);
+}
+
+.login-content .form-control button[type="submit"]:active {
+  border: solid transparent;
+}
+
+.login-content .form-control.submit-control {
+  margin-top: 1.5rem;
+  width: 100%;
+  display: inline-flex;
+  justify-content: center;
+}
+
+.login-content .form-control .lds-ellipsis {
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+
+.login-content .form-control .lds-ellipsis div {
+  position: absolute;
+  top: 33px;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: #fff;
+  animation-timing-function: cubic-bezier(0, 1, 1, 0);
+}
+
+.login-content .form-control .lds-ellipsis div:nth-child(1) {
+  left: 8px;
+  animation: lds-ellipsis1 0.6s infinite;
+}
+
+.login-content .form-control .lds-ellipsis div:nth-child(2) {
+  left: 8px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+
+.login-content .form-control .lds-ellipsis div:nth-child(3) {
+  left: 32px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+
+.login-content .form-control .lds-ellipsis div:nth-child(4) {
+  left: 56px;
+  animation: lds-ellipsis3 0.6s infinite;
+}
+
+.login-content h2 {
+  font-size: 2.5rem;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+@keyframes lds-ellipsis1 {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes lds-ellipsis3 {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+
+@keyframes lds-ellipsis2 {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(24px, 0);
+  }
 }
 
 .nav {

@@ -8856,36 +8856,47 @@
   }();
 
   class SliderImage {
-  	constructor() {
+  	/**
+  	 * Create a new Home SliderImage
+  	 * @param {Number} delay
+  	 */
+  	constructor(delay = 5) {
+  		this.delay = delay;
   		const el = document.querySelector("[data-scroll-container]");
   		this.scroll = new Smooth({
   			el,
   			smooth: true,
   			direction: "horizontal",
   			lerp: 0.05,
+  			scrollbarContainer: document.querySelector(".c-scrollbar"),
   		});
 
   		gsapWithCSS.fromTo(
-  			el.querySelectorAll("img"),
+  			el.querySelectorAll(".gallery__wrapper"),
   			{
   				opacity: 0,
   			},
   			{
-  				delay: 5,
-  				duration: 0.25,
+  				delay: this.delay,
+  				duration: 0.35,
   				opacity: 1,
-  				stagger: 0.2,
+  				stagger: 0.18,
   				onStart: () => {
   					this.scroll.scrollTo(
   						document.querySelector(
   							".gallery__wrapper:last-child img"
   						),
   						{
-  							duration: 50 * 1000,
+  							duration:
+  								el.querySelectorAll(".gallery__wrapper")
+  									.length *
+  								5 *
+  								1000,
   						}
   					);
   				},
-  			}
+  			},
+  			delay > 0 ? "-=.25" : "-=0"
   		);
   	}
   	getScroll() {
@@ -8893,10 +8904,46 @@
   	}
   }
 
+  class Login {
+  	constructor({ form }) {
+  		this.form = document.querySelector(form);
+  		this.onSubmit();
+  	}
+  	onSubmit() {
+  		this.form.addEventListener("submit", async (e) => {
+  			e.preventDefault();
+  			const { srcElement: $base } = e;
+  			const oldText = $base.querySelector("button").innerHTML;
+  			$base.querySelector(
+  				"button"
+  			).innerHTML = `<div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>`;
+  			const email = $base.querySelector("input[type=email]").value;
+  			const password = $base.querySelector("input[type=password]").value;
+  			console.log({ email, password });
+  			const data = await fetch("/user/login", {
+  				method: "post",
+  				headers: {
+  					"Content-type":
+  						"application/x-www-form-urlencoded; charset=UTF-8",
+  				},
+  				body: `email=${email}&password=${password}`,
+  			});
+  			const body = await data.json();
+  			localStorage.setItem("tokenJWT", body.token);
+  			setTimeout(() => {
+  				console.log(localStorage.hasOwnProperty("tokenJWT"));
+  			}, 2000);
+  			$base.querySelector("button").innerHTML = oldText;
+  			console.log(body);
+  		});
+  	}
+  }
+
   class App {
   	constructor() {
   		this.create();
   		this.loco = null;
+  		this.login = null;
   	}
   	create() {
   		window.addEventListener("load", () => {
@@ -8909,12 +8956,22 @@
   				window.removeEventListener("resize", this.resizeWord);
   				this.loco.getScroll().destroy();
   			}
+  			if (current.namespace === "login") {
+  				this.login = this.login.destroy();
+  			}
   		});
-  		barba_umd.hooks.beforeEnter(({ next }) => {
+  		barba_umd.hooks.beforeEnter(({ next, current }) => {
   			if (next.namespace === "home") {
   				this.resizeWord();
   				window.addEventListener("resize", this.resizeWord);
-  				this.loco = new SliderImage();
+  				if (current.namespace === "") {
+  					this.loco = new SliderImage(5);
+  				} else {
+  					this.loco = new SliderImage(0);
+  				}
+  			}
+  			if (next.namespace === "login") {
+  				this.login = new Login({ form: ".login-form" });
   			}
   		});
   		barba_umd.init({

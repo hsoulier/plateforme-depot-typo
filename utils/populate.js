@@ -10,11 +10,12 @@ const router = Router()
 router.get("/user", async (req, res) => {
 	try {
 		let data = []
+		let users = []
 		for (let i = 0; i < 5; i++) {
 			const pwd = faker.internet.password()
 			const password = await hashPassword(pwd)
-			const email = faker.internet.email()
-			console.log({ email, pwd })
+			const email = faker.internet.email().toLocaleLowerCase()
+			users.push({ email, pwd })
 			data = [
 				...data,
 				{
@@ -30,7 +31,7 @@ router.get("/user", async (req, res) => {
 			]
 		}
 		const inserted = await User.insertMany(data)
-		return res.json({ result: inserted })
+		return res.json({ users, inserted })
 	} catch (error) {
 		return res.json(error)
 	}

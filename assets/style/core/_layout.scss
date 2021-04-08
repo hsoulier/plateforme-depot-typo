@@ -61,4 +61,14 @@ main {
 .return-home {
 	height: space(8);
 	align-self: flex-start;
+	transition: color var(--ease);
+	svg {
+		transition: transform var(--ease);
+	}
+	&:hover {
+		color: var(--clr-primary);
+		svg {
+			transform: translateX(-#{space(1.5)});
+		}
+	}
 }
