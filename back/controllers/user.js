@@ -11,9 +11,8 @@ export async function loginUser(req, res) {
 		if (!result) return res.json({ success: "Bad password" })
 		const token = createToken(userDb)
 		return res.json({ token })
-		// return res.redirect("/dash")
 	} catch (e) {
-		return res.render("success", { success: false })
+		return res.json({ error: e })
 	}
 }
 

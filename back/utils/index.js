@@ -1,5 +1,6 @@
-import fs from "fs"
 import bcrypt from "bcrypt"
+import fs, { statSync, readdirSync } from "fs"
+import { join } from "path"
 
 export function jsonReader(filePath, cb) {
 	fs.readFile(filePath, (err, fileData) => {
@@ -43,4 +44,32 @@ export const hashPassword = async (password, saltRounds = 10) => {
 		console.log(error)
 	}
 	return null
+}
+
+export const shuffleArray = (array) => {
+	for (var i = array.length - 1; i > 0; i--) {
+		var j = Math.floor(Math.random() * (i + 1))
+		var temp = array[i]
+		array[i] = array[j]
+		array[j] = temp
+	}
+}
+export const isDirectory = (path) => statSync(path).isDirectory()
+export const getDirectories = (path) =>
+	readdirSync(path)
+		.map((name) => join(path, name))
+		.filter(isDirectory)
+
+export const isFile = (path) => statSync(path).isFile()
+export const getFiles = (path) =>
+	readdirSync(path)
+		.map((name) => join(path, name))
+		.filter(isFile)
+
+export const getFilesRecursively = (path) => {
+	let dirs = getDirectories(path)
+	let files = dirs
+		.map((dir) => getFilesRecursively(dir))
+		.reduce((a, b) => a.concat(b), [])
+	return files.concat(getFiles(path))
 }
