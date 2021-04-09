@@ -1,0 +1,11 @@
+{{>header}}
+{{>navbar}}
+{{>rules}}
+<main class="{{@exphbs.view}}-content" data-barba="container" data-barba-namespace="{{@exphbs.view}}">
+	<div class="{{@exphbs.view}}-content__container">
+		{{returnButton @exphbs.view}}
+		{{{body}}}
+	</div>
+	<span class="c-scrollbar"></span>
+</main>
+{{>footer}}

@@ -1,0 +1,38 @@
+#app:not(dashboard) {
+	display: grid;
+	width: 100vw;
+	max-width: 100vw;
+	min-height: 700px;
+	height: 100vh;
+	grid-template: space(32) auto / min-content 1fr;
+	grid-template-areas:
+		"navbar content"
+		"rules content";
+}
+main {
+	grid-area: content;
+	position: relative;
+	overflow-x: hidden;
+	grid-area: content;
+	& > [class*="__container"]:not(.home-page__container) {
+		padding: space(4);
+	}
+	& > [class*="__container"] {
+		position: relative;
+	}
+}
+
+.return-home {
+	height: space(8);
+	align-self: flex-start;
+	transition: color var(--ease);
+	svg {
+		transition: transform var(--ease);
+	}
+	&:hover {
+		color: var(--clr-primary);
+		svg {
+			transform: translateX(-#{space(1.5)});
+		}
+	}
+}

@@ -1,0 +1,9 @@
+// Core Style
+@import "./core/variable", "./core/reset", "./core/mixins", "./core/includes",
+	"./core/layout";
+
+// Individual Page style
+@import "./pages/home", "./pages/login";
+
+// Components Elements
+@import "./components/navbar", "./components/loader", "./components/locomotive";

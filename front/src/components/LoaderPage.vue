@@ -1,0 +1,60 @@
+<template>
+	<div class="loader-screen">
+		<div class="loader-screen__container">
+			<div class="loader-screen__wrapper">
+				<span id="loader">0</span>
+				<span>%</span>
+			</div>
+		</div>
+		<div class="loader-screen__progress"></div>
+	</div>
+</template>
+
+
+<script>
+export default {
+	name: "LoaderPage"
+};
+</script>
+
+
+<style lang="scss" scoped>
+.loader-screen {
+	position: absolute;
+	z-index: 999;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: var(--clr-white);
+	color: var(--clr-black);
+	&__container {
+		display: flex;
+		align-items: flex-end;
+		justify-content: flex-start;
+		height: calc(100% - #{space(1.5)});
+		padding: space(4);
+	}
+	&__wrapper {
+		overflow: hidden;
+		background-color: transparent;
+		display: inline-block;
+		span {
+			display: inline-block;
+			font-size: space(5);
+			font-weight: 300;
+		}
+		#loader {
+			font-size: space(16);
+			font-weight: 600;
+		}
+	}
+	&__progress {
+		height: space(1.5);
+		width: 100%;
+		transform: translate3d(-100%, 0, 0);
+		transition: transform 45ms linear;
+		background-color: var(--clr-primary);
+	}
+}
+</style>
