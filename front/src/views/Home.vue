@@ -53,12 +53,8 @@
 		async mounted() {
 			this.$word = document.querySelector(".current-word h1")
 			this.imgs = await getImages()
-			// await api.get("/content/images").then((res) => {
-			// 	this.imgs = res.data.imgs
-			// })
 			this.resizeWord()
-
-			window.addEventListener("load", () => {
+			this.$nextTick(() => {
 				this.scroll = new LocomotiveScroll({
 					el: document.querySelector("[data-scroll-container]"),
 					smooth: true,
@@ -76,16 +72,6 @@
 						duration: 0.35,
 						opacity: 1,
 						stagger: 0.18,
-						// onStart: () => {
-						// 	this.scroll.scrollTo(
-						// 		document.querySelector(
-						// 			".gallery__wrapper:last-child img"
-						// 		),
-						// 		{
-						// 			duration: $galleryW.length * 5 * 1000,
-						// 		}
-						// 	)
-						// },
 					}
 				)
 			})
@@ -94,9 +80,8 @@
 		updated() {
 			console.log("Update " + this.scroll)
 		},
-		unmounted() {
+		beforeUnmount() {
 			console.log("unmount")
-			this.scroll.destroy()
 		},
 	}
 </script>
@@ -118,7 +103,7 @@
 		}
 	}
 	[data-scroll-container] {
-		min-height: auto !important;
+		min-height: 30rem !important;
 		height: 60vh !important;
 	}
 	.gallery {

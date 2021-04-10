@@ -2,6 +2,9 @@ import Text from "../models/Text.js"
 import Word from "../models/Word.js"
 import { shuffleArray, getFilesRecursively } from "../utils/index.js"
 import jwt from "jsonwebtoken"
+import dotenv from "dotenv"
+
+dotenv.config()
 
 let imgs = []
 
@@ -43,7 +46,6 @@ const extractBearerToken = (headerValue) => {
 	if (typeof headerValue !== "string") {
 		return false
 	}
-
 	const matches = headerValue.match(/(bearer)\s+(\S+)/i)
 	return matches && matches[2]
 }
@@ -52,12 +54,11 @@ export function checkToken(req, res, next) {
 	const token =
 		req.headers.authorization &&
 		extractBearerToken(req.headers.authorization)
-
 	if (!token) {
 		return res.status(401).json({ error: "Error. Need a token" })
 	}
 
-	jwt.verify(token, SECRET_JWT, (err, decodedToken) => {
+	jwt.verify(token, process.env.SECRET_JWT, (err, decodedToken) => {
 		if (err) {
 			res.status(401).json({ error: "Error. Bad token" })
 		} else {
@@ -66,21 +67,3 @@ export function checkToken(req, res, next) {
 		}
 	})
 }
-
-// export async function home(req, res) {
-// 	imgs = getFilesRecursively(`./public/uploads`)
-// 	imgs = imgs
-// 		.map((img) =>
-// 			img.includes("public") ? img.replace("public", "") : img
-// 		)
-// 		.filter(
-// 			(file) =>
-// 				!file.includes(".DS_Store") &&
-// 				file
-// 					.split(".")
-// 					[file.split(".").length - 1].match(/jp(e)?g|png/g)
-// 		)
-// 	shuffleArray(imgs)
-// 	const word = await Word.findOne({ isCurrent: true })
-// 	return res.render("home", { text: req.rules, word, imgs })
-// }

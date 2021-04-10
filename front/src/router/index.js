@@ -1,8 +1,9 @@
 import { createRouter, createWebHashHistory } from "vue-router"
-import Home from "../views/Home.vue"
-import Login from "../views/Login.vue"
-import Dashboard from "../views/Dashboard.vue"
-import Submit from "../views/Submit.vue"
+import Home from "@/views/Home.vue"
+import Login from "@/views/Login.vue"
+import Dashboard from "@/views/Dashboard.vue"
+import Submit from "@/views/Submit.vue"
+import Legals from "@/views/Legals.vue"
 
 const routes = [
 	{
@@ -24,6 +25,11 @@ const routes = [
 		path: "/submit",
 		name: "Submit",
 		component: Submit,
+	},
+	{
+		path: "/legals",
+		name: "Legals",
+		component: Legals,
 	},
 ]
 

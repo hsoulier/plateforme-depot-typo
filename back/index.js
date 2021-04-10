@@ -7,8 +7,8 @@ import mongoose from "mongoose"
 import routerIndex from "./routes/index.js"
 import routerContent from "./routes/content.js"
 import routerUser from "./routes/user.js"
-import routerPopulate from "./utils/populate.js"
-import routerTest from "./utils/routerTest.js"
+// import routerPopulate from "./utils/populate.js"
+// import routerTest from "./utils/routerTest.js"
 
 dotenv.config()
 const app = express()
