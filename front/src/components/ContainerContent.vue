@@ -8,35 +8,34 @@
 	</main>
 </template>
 
-
 <script>
-import BackButton from "@/components/BackButton.vue";
-export default {
-	name: "ContainerContent",
-	components: {
-		BackButton
-	},
-	data() {
-		return {
-			contentClass: String
-		};
-	},
-	beforeMount() {
-		const { name } = this.$route;
-		this.contentClass = `${!!name ? name.toLowerCase() : "home"}-page`;
+	import BackButton from "@/components/BackButton.vue"
+	export default {
+		name: "ContainerContent",
+		components: {
+			BackButton,
+		},
+		data() {
+			return {
+				contentClass: String,
+			}
+		},
+		beforeMount() {
+			const { name } = this.$route
+			this.contentClass = `${!!name ? name.toLowerCase() : "home"}-page`
+		},
 	}
-};
 </script>
 
-
 <style lang="scss" scoped>
-.login-page {
-	&__container {
-		height: 100%;
-		width: 100%;
-		display: flex;
-		align-items: center;
-		flex-direction: column;
+	.login-page,
+	.submit-page {
+		&__container {
+			height: 100%;
+			width: 100%;
+			display: flex;
+			align-items: center;
+			flex-direction: column;
+		}
 	}
-}
 </style>

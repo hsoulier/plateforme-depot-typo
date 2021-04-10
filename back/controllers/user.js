@@ -17,7 +17,6 @@ export async function loginUser(req, res) {
 }
 
 export const getInfosUser = async (req, res) => {
-	console.log({ token: req.token })
 	const user = await User.findById(req.token.id)
 	return res.json(user)
 }

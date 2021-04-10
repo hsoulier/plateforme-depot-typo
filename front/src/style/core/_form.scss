@@ -3,6 +3,7 @@
 		display: inline-block;
 		color: inherit;
 		font-size: space(2.25);
+		opacity: 0.5;
 		transition: all var(--ease);
 		z-index: 10;
 		padding-left: space(0.5);
@@ -21,17 +22,31 @@
 		display: inline-block;
 		outline: none;
 		z-index: 20;
-		&[type="email"]:valid ~ label,
-		&[type="email"]:focus ~ label,
-		&[type="email"]:not(:placeholder-shown):not(:focus):invalid ~ label,
-		&[type="password"]:not(:placeholder-shown):not(:focus):invalid ~ label,
-		&[type="password"]:valid ~ label,
-		&[type="password"]:focus ~ label {
-			top: space(-8);
+		&:valid ~ label,
+		&:focus ~ label,
+		&:not(:placeholder-shown):not(:focus):invalid ~ label,
+		&:not(:placeholder-shown):not(:focus):invalid ~ label,
+		&:valid ~ label,
+		&:focus ~ label {
+			top: space(-7);
 		}
-		&[type="email"]:invalid,
-		&[type="password"]:invalid {
+		&:invalid,
+		&:invalid {
 			outline: none;
+		}
+	}
+	textarea {
+		border: none;
+		border-bottom: 2px solid var(--clr-primary);
+		padding: space(0.5);
+		background-color: transparent;
+		font: inherit;
+		color: inherit;
+		width: 100%;
+		display: inline-block;
+		outline: none;
+		& ~ label {
+			top: 0;
 		}
 	}
 	button[type="submit"] {
@@ -58,10 +73,11 @@
 	}
 }
 .form-row {
-	display: flex;
-	justify-content: space-between;
-	align-items: flex-start;
-	// & > * + * {
-	// 	margin-left: space(2);
-	// }
+	display: grid;
+	gap: space(4);
+	@for $i from 2 to 4 {
+		&.col-#{$i} {
+			grid-template-columns: repeat(#{$i}, 1fr);
+		}
+	}
 }

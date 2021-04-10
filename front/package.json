@@ -7,11 +7,16 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "@grafikart/drop-files-element": "^1.0.9",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
+    "filepond": "^4.27.0",
+    "filepond-plugin-file-validate-type": "^1.2.6",
+    "filepond-plugin-image-preview": "^4.6.6",
     "gsap": "^3.6.1",
     "locomotive-scroll": "^4.1.1",
     "vue": "^3.0.0",
+    "vue-filepond": "^7.0.0",
     "vue-router": "^4.0.0-0"
   },
   "devDependencies": {

@@ -1,81 +1,81 @@
 <template>
 	<ContainerContent>
-		<form method="post" enctype="multipart/form-data">
-			<div class="relative p-8 bg-white border-black border-4">
-				<h2 class="text-2xl text-center mb-8">Déposer son travail</h2>
-				<div class="form-row">
-					<div class="form-control">
-						<input
-							type="text"
-							id="firstName"
-							v-model="user.firstName"
-							placeholder=" "
-							autocomplete
-							required
-						/>
-						<label for="firstName">Prénom</label>
-					</div>
-					<div class="form-control">
-						<input
-							type="text"
-							id="name"
-							v-model="user.name"
-							placeholder=" "
-							autocomplete
-							required
-						/>
-						<label for="name">Nom</label>
-					</div>
-				</div>
-				<div class="mb-8">
+		<h2 class="text-2xl text-center mb-8">Déposer son travail</h2>
+		<form method="post" enctype="multipart/form-data" class="submit-repo">
+			<div class="form-row col-2">
+				<div class="form-control">
 					<input
-						type="email"
-						v-model="user.email"
-						placeholder="email *"
-						class="w-full py-2 placeholder-gray-700 border-b-2 border-black focus:outline-none focus:border-gray-400 transition-colors duration-200 ease-in-out"
+						type="text"
+						id="firstName"
+						v-model="user.firstName"
+						placeholder=" "
+						autocomplete
 						required
 					/>
+					<label for="firstName">Prénom</label>
 				</div>
-				<div class="flex mb-8 w-full gap-6">
-					<div class="flex-grow">
-						<input
-							type="text"
-							v-model="user.socials.instagram"
-							placeholder="@ instagram"
-							class="w-full py-2 placeholder-gray-700 border-b-2 border-black focus:outline-none focus:border-gray-400 transition-colors duration-200 ease-in-out"
-						/>
-					</div>
-					<div class="flex-grow">
-						<input
-							type="text"
-							v-model="user.socials.twitter"
-							placeholder="@ twitter"
-							class="w-full py-2 placeholder-gray-700 border-b-2 border-black focus:outline-none focus:border-gray-400 transition-colors duration-200 ease-in-out"
-						/>
-					</div>
+				<div class="form-control">
+					<input
+						type="text"
+						id="name"
+						v-model="user.name"
+						placeholder=" "
+						autocomplete
+						required
+					/>
+					<label for="name">Nom</label>
 				</div>
+			</div>
+			<div class="form-control">
+				<input
+					type="email"
+					id="email"
+					placeholder=" "
+					v-model="user.email"
+					autocomplete
+					required
+				/>
+				<label for="email">Email</label>
+			</div>
+			<div class="form-row col-2">
+				<div class="form-control">
+					<input
+						type="text"
+						id="insta"
+						v-model="user.socials.instagram"
+						placeholder=" "
+					/>
+					<label for="insta">@ Instagram</label>
+				</div>
+				<div class="form-control">
+					<input
+						type="text"
+						id="twitter"
+						v-model="user.socials.twitter"
+						placeholder=" "
+					/>
+					<label for="twitter">@ twitter</label>
+				</div>
+			</div>
+			<div class="form-control">
+				<label for="description">Petite description (si besoin)</label>
 				<textarea
 					name="description"
 					rows="3"
-					class="w-full py-2 placeholder-gray-700 border-b-2 border-black focus:outline-none focus:border-gray-400 transition-colors duration-200 ease-in-out mb-8"
+					v-model="description"
 					style="min-height: 3rem;"
-					placeholder="petite description (si besoin)"
 				></textarea>
-				<input
-					type="file"
-					name="files"
-					multiple
-					label="Déposer le fichier <br/>ou cliquez ici"
-					is="drop-files"
-				/>
-				<div class="flex justify-center mt-4">
-					<button
-						type="submit"
-						class="transition-colors duration-200 ease-in-out justify-center mx-auto px-8 py-2 border-2 border-black text-2xl font-bold text-white bg-black hover:bg-white hover:text-black md:px-10"
-					>
-						déposer
-					</button>
-				</div>
+			</div>
+			<input
+				type="file"
+				multiple
+				name="files"
+				label="Drop files here or click to upload."
+				help="Upload files here and they won't be sent immediately"
+				is="drop-files"
+			/>
+			<div class="form-control">
+				<button type="submit">déposer</button>
 			</div>
 		</form>
 	</ContainerContent>
@@ -84,15 +84,28 @@
 <script>
 	import ContainerContent from "@/components/ContainerContent.vue"
 	import { getUserInfos } from "@/config/requests"
+	import "@grafikart/drop-files-element"
+	// import vueFilePond from "vue-filepond"
+	// import FilePondPluginFileValidateType from "filepond-plugin-file-validate-type"
+	// import FilePondPluginImagePreview from "filepond-plugin-image-preview"
+	// import "filepond/dist/filepond.min.css"
+	// import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css"
 
+	// const FilePond = vueFilePond(
+	// 	FilePondPluginFileValidateType,
+	// 	FilePondPluginImagePreview
+	// )
 	export default {
 		name: "Submit",
 		components: {
 			ContainerContent,
+			// FilePond,
 		},
 		data() {
 			return {
+				myFiles: [],
 				user: {
+					description: null,
 					email: null,
 					socials: {
 						instagram: null,
@@ -116,6 +129,12 @@
 				}
 			}
 		},
+		// methods: {
+		// 	handleFilePondInit() {
+		// 		console.log("FilePond has initialized")
+		// 		this.$refs.pond.getFiles()
+		// 	},
+		// },
 	}
 </script>
 
@@ -126,12 +145,26 @@
 		font-weight: 600;
 		margin-bottom: space(2);
 	}
-	.form-control {
-		width: 75%;
-		position: relative;
-		margin: space(6) auto space(2);
-		&:first-child {
-			margin-top: space(9);
+	.submit-repo {
+		margin-top: space(8);
+		max-width: space(60);
+		& > * + * {
+			margin-top: space(5);
+		}
+
+		.filepond {
+			&--root {
+				font-family: var(--font);
+			}
+			&--list {
+				display: flex;
+				justify-content: flex-start;
+				flex-wrap: wrap;
+			}
+			&--item {
+				transform: translateX(0);
+				width: calc(1 / 3 * 100% - 0.5rem);
+			}
 		}
 	}
 </style>
