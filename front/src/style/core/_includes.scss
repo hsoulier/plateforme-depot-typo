@@ -1,24 +1,39 @@
 %mx-auto {
-	margin-left: auto;
-	margin-right: auto;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 %line {
-	content: "";
-	position: absolute;
-	background-color: var(--clr-black);
+  content: "";
+  position: absolute;
+  background-color: var(--clr-black);
 }
+
 %v-line {
-	@extend %line;
-	top: 0;
-	bottom: 0;
-	right: 0;
-	width: 3px;
+  @extend %line;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 3px;
 }
+
 %h-line {
-	@extend %line;
-	top: 0;
-	right: 0;
-	left: 0;
-	height: 3px;
+  @extend %line;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 3px;
+}
+
+@each $p, $val in ("pl-": "padding-left", "pr-": "padding-right", "pt-": "padding-top", "pb-": "padding-bottom") {
+  @for $i from 0 through 10 {
+    .#{$p}#{$i} {
+      #{$val}: space($i) !important;
+    }
+  }
+}
+
+
+.pl-0 {
+  padding-left: 0 !important;
 }

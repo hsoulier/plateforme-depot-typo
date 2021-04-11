@@ -1,77 +1,54 @@
 .form-control {
-	label {
-		display: inline-block;
-		color: inherit;
-		font-size: space(2.25);
-		opacity: 0.5;
-		transition: all var(--ease);
-		z-index: 10;
-		padding-left: space(0.5);
-		position: relative;
-		top: space(-3.5);
-	}
-	input {
-		border: none;
-		border-bottom: 2px solid var(--clr-primary);
-		padding: space(0.5);
-		background-color: transparent;
-		font: inherit;
-		color: inherit;
-		width: 100%;
-		position: relative;
-		display: inline-block;
-		outline: none;
-		z-index: 20;
-		&:valid ~ label,
-		&:focus ~ label,
-		&:not(:placeholder-shown):not(:focus):invalid ~ label,
-		&:not(:placeholder-shown):not(:focus):invalid ~ label,
-		&:valid ~ label,
-		&:focus ~ label {
-			top: space(-7);
-		}
-		&:invalid,
-		&:invalid {
-			outline: none;
-		}
-	}
-	textarea {
-		border: none;
-		border-bottom: 2px solid var(--clr-primary);
-		padding: space(0.5);
-		background-color: transparent;
-		font: inherit;
-		color: inherit;
-		width: 100%;
-		display: inline-block;
-		outline: none;
-		& ~ label {
-			top: 0;
-		}
-	}
-	button[type="submit"] {
-		outline: none;
-		cursor: pointer;
-		background-color: var(--clr-primary);
-		padding: space(1) space(2);
-		font: 600 space(3) / 1 var(--font);
-		border: 2px solid var(--clr-primary);
-		transition: color var(--ease), background-color var(--ease);
-		&:hover {
-			background-color: transparent;
-			color: var(--clr-primary);
-		}
-		&:active {
-			border: solid transparent;
-		}
-	}
-	&.submit-control {
-		margin-top: space(3);
-		width: 100%;
-		display: inline-flex;
+	position: relative;
+
+	&.form-submit {
+		display: flex;
+		align-content: center;
 		justify-content: center;
 	}
+
+	.form-submit {
+		display: flex;
+		align-content: center;
+		justify-content: center;
+	}
+
+	input {
+		outline: none;
+		width: 100%;
+		padding: space(1.75) space(2) space(1.75) space(5.5);
+		border: 2px solid var(--clr-primary);
+		font: inherit;
+		background: transparent;
+
+		&:focus {
+			-webkit-box-shadow: none;
+			box-shadow: none;
+		}
+
+		&:invalid {
+			border-color: var(--clr-primary);
+			outline: none !important;
+		}
+
+		&:required {
+			border-color: var(--clr-primary);
+			outline: none !important;
+		}
+
+	}
+
+
+	svg {
+		position: absolute;
+		top: 50%;
+		left: space(2);
+		transform: translateY(-50%);
+		height: 50%;
+		width: space(2.5);
+	}
 }
+
 .form-row {
 	display: grid;
 	gap: space(4);

@@ -28,9 +28,15 @@ export const dashboard = async () => {
 }
 
 export const getUserInfos = async () => {
-	const result = await api.get("/user/", {
+	const result = await api.get("/user", {
 		Authorization: `Bearer ${localStorage.getItem("JWT")}`,
 	})
+	const { data } = result
+	return data
+}
+
+export const sendRepo = async (content) => {
+	const result = await api.post("/repo", content)
 	const { data } = result
 	return data
 }

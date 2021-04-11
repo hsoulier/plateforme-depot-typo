@@ -5,26 +5,30 @@
 			<div class="form-control">
 				<input
 					type="email"
-					id="email"
 					v-model="email"
-					placeholder=" "
-					autocomplete
+					placeholder="Email"
 					required
 				/>
-				<label for="email">Email</label>
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+					 stroke="currentColor" stroke-width="2.5" stroke-linecap="butt" stroke-linejoin="arcs">
+					<circle cx="12" cy="12" r="4"></circle>
+					<path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.92 7.94"></path>
+				</svg>
 			</div>
 			<div class="form-control">
 				<input
 					type="password"
-					id="password"
 					v-model="password"
-					placeholder=" "
-					autocomplete
+					placeholder="Mot de passe"
 					required
 				/>
-				<label for="password">Mot de passe</label>
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+					 stroke="currentColor" stroke-width="2.5" stroke-linecap="butt" stroke-linejoin="arcs">
+					<rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+					<path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+				</svg>
 			</div>
-			<div class="form-control submit-control">
+			<div class="form-control form-submit">
 				<button type="submit">Se connecter</button>
 			</div>
 		</form>
@@ -32,49 +36,54 @@
 </template>
 
 <script>
-	import { loginUser, updateApiToken } from "@/config/requests"
-	import ContainerContent from "@/components/ContainerContent.vue"
+import { loginUser, updateApiToken } from "@/config/requests"
+import ContainerContent from "@/components/ContainerContent.vue"
 
-	export default {
-		name: "Login",
-		data() {
-			return {
-				email: null,
-				password: null,
+export default {
+	name: "Login",
+	data() {
+		return {
+			email: null,
+			password: null,
+		}
+	},
+	components: {
+		ContainerContent,
+	},
+	methods: {
+		async submitForm() {
+			const body = {
+				email: this.email,
+				password: this.password,
 			}
+			const token = await loginUser(body)
+			updateApiToken(token)
 		},
-		components: {
-			ContainerContent,
-		},
-		methods: {
-			async submitForm() {
-				const body = {
-					email: this.email,
-					password: this.password,
-				}
-				const token = await loginUser(body)
-				updateApiToken(token)
-			},
-		},
-	}
+	},
+}
 </script>
 
 <style lang="scss" scoped>
-	.login-form {
-		.form-control {
-			width: 75%;
-			position: relative;
-			margin: space(6) auto space(2);
-			&:first-child {
-				margin-top: space(9);
-			}
-		}
+form {
+	width: 60%;
+	max-width: space(80);
+}
 
-		h2 {
-			font-size: space(5);
-			text-transform: uppercase;
-			font-weight: 600;
-			margin-bottom: space(2);
-		}
+.login-form {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: space(3);
+
+	h2 {
+		text-align: center;
+		font-size: space(5);
+		text-transform: uppercase;
+		font-weight: 600;
+		margin-bottom: space(5);
 	}
+}
+
+button {
+	@extend %btn;
+}
 </style>
