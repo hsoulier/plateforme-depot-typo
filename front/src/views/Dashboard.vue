@@ -1,7 +1,6 @@
 <template>
 	<ContainerContent>
 		<h1 class="h1">Bonjour</h1>
-		<!-- {{data}} -->
 	</ContainerContent>
 </template>
 
@@ -14,17 +13,14 @@ export default {
 	components: {
 		ContainerContent
 	},
-	data() {
-		return {
-			// data: null
-		};
-	},
-	async mounted() {
+	mounted() {
 		if (localStorage.getItem("JWT")) {
 			this.$router.push({ name: "Login" });
 		}
-		const result = await getUserInfos();
-		console.log(this.data);
+		this.$nextTick(async () => {
+			// const result = await getUserInfos();
+			console.log(this.data);
+		});
 	}
 };
 </script>

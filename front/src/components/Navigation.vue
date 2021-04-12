@@ -17,18 +17,37 @@
 				</a>
 			</div>
 			<div class="nav__link">
-				<router-link to="/submit">Déposer</router-link>
+				<router-link :to="{name: 'Submit'}">Déposer</router-link>
 			</div>
 			<div class="nav__link">
-				<router-link to="/login">Connexion</router-link>
+				<router-link :to="{name: 'Login'}">{{isConnected ? "Dashboard": "Connexion"}}</router-link>
 			</div>
 		</div>
 	</nav>
 </template>
 
 <script>
+import { ref, onMounted, onUpdated } from "vue";
+import { useStore } from "vuex";
+
 export default {
-	name: "Navigation"
+	setup() {
+		const store = useStore();
+		let isConnected = ref(false);
+
+		onMounted(() => {
+			isConnected = store.state.isConnected;
+			console.log("Mount", store.state.isConnected);
+		});
+		onUpdated(() => {
+			isConnected = store.state.isConnected;
+			console.log("Update", store.state.isConnected);
+		});
+
+		return {
+			isConnected
+		};
+	}
 };
 </script>
 

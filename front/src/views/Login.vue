@@ -71,15 +71,18 @@ export default {
 			const token = await loginUser(body);
 			const result = updateApiToken(token);
 			if (result) {
-				this.$router.push({ name: "Dashboard" });
+				this.$store.commit("loginUser", true);
+				// this.$router.push({ name: "Dashboard" });
 			}
 			this.message = "La connexion a échouée";
 		}
 	},
 	mounted() {
-		if (localStorage.getItem("JWT")) {
-			this.$router.push({ name: "Dashboard" });
-		}
+		// this.$nextTick(() => {
+		// 	if (localStorage.getItem("JWT")) {
+		// 		this.$router.push({ name: "Dashboard" });
+		// 	}
+		// });
 	}
 };
 </script>
