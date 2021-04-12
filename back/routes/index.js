@@ -1,5 +1,5 @@
 import { Router } from "express"
-import upload from "../controllers/multer.js";
+import { upload, renameFiles } from "../controllers/upload.js"
 
 const router = Router()
 
@@ -7,8 +7,6 @@ router.get("/", (req, res) => {
 	res.json({ message: "Hello sur l'API 👋" })
 })
 
-router.post("/repo", upload, (req, res) => {
-	res.json({ message: "Envoyé" })
-})
+router.post("/repo", upload, renameFiles)
 
 export default router

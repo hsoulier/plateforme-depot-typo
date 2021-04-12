@@ -1,20 +1,30 @@
-<template> </template>
+<template>
+	<ContainerContent>
+		<h1 class="h1">Bonjour</h1>
+		<!-- {{data}} -->
+	</ContainerContent>
+</template>
 
 <script>
-	import { dashboard } from "@/config/requests"
-	export default {
-		name: "Dashboard",
-		data() {
-			return {
-				data: null,
-			}
-		},
-		async mounted() {
-			this.data = await dashboard()
-			console.log(this.data)
-			if (!Boolean(this.data?.error)) {
-				this.$router.push({ name: "Login" })
-			}
-		},
+import ContainerContent from "@/components/ContainerContent.vue";
+import { dashboard } from "@/config/requests";
+
+export default {
+	name: "Dashboard",
+	components: {
+		ContainerContent
+	},
+	data() {
+		return {
+			// data: null
+		};
+	},
+	async mounted() {
+		if (localStorage.getItem("JWT")) {
+			this.$router.push({ name: "Login" });
+		}
+		const result = await getUserInfos();
+		console.log(this.data);
 	}
+};
 </script>

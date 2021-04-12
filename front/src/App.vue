@@ -1,10 +1,8 @@
 <template>
-	<template v-if="route !== 'Dashboard'">
-		<LoaderPage />
-		<Navigation />
-		<Rules />
-		<router-view />
-	</template>
+	<LoaderPage />
+	<Navigation />
+	<Rules />
+	<router-view />
 </template>
 
 
@@ -22,13 +20,7 @@ export default {
 		Rules,
 		BackButton
 	},
-	data() {
-		return {
-			route: null
-		};
-	},
 	mounted() {
-		this.route = this.$route.name;
 		const a = {
 			load: 0
 		};
@@ -53,7 +45,7 @@ export default {
 			content: document.querySelectorAll(".current-word > *")
 		};
 
-		const tl = gsap.timeline();
+		const tl = gsap.timeline({ paused: false });
 		tl.to(a, {
 			load: 100,
 			duration: 1.5,
@@ -118,9 +110,6 @@ export default {
 				},
 				"-=.5"
 			);
-	},
-	updated() {
-		this.route = this.$route.name;
 	}
 };
 </script>

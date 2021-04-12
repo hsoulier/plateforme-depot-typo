@@ -4,6 +4,7 @@ import Login from "@/views/Login.vue"
 import Dashboard from "@/views/Dashboard.vue"
 import Submit from "@/views/Submit.vue"
 import Legals from "@/views/Legals.vue"
+import Page404 from "@/components/Page404.vue"
 
 const routes = [
 	{
@@ -30,6 +31,11 @@ const routes = [
 		path: "/legals",
 		name: "Legals",
 		component: Legals,
+	},
+	{
+		path: "/:pathMatch(.*)*",
+		name: "404",
+		component: Page404,
 	},
 ]
 

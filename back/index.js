@@ -1,14 +1,13 @@
 import dotenv from "dotenv"
-import express, { json, urlencoded } from "express"
+import express, { json } from "express"
 import helmet from "helmet"
 import morgan from "morgan"
+import bodyParser from "body-parser"
 import cors from "cors"
 import mongoose from "mongoose"
 import routerIndex from "./routes/index.js"
 import routerContent from "./routes/content.js"
 import routerUser from "./routes/user.js"
-// import routerPopulate from "./utils/populate.js"
-// import routerTest from "./utils/routerTest.js"
 
 dotenv.config()
 const app = express()
@@ -29,13 +28,11 @@ mongoose
 app.use(cors())
 app.use(helmet())
 app.use(morgan("dev"))
+app.use(bodyParser.urlencoded({ extended: true }))
 app.use(json())
-app.use(urlencoded({ extended: true }))
 app.use(express.static("public"))
 
 // Router
-// app.use("/populate", routerPopulate)
-// app.use("/test", routerTest)
 app.use("/content", routerContent)
 app.use("/user", routerUser)
 app.use("/", routerIndex)

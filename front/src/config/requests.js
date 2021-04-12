@@ -20,7 +20,7 @@ export const loginUser = async (body) => {
 
 export const dashboard = async () => {
 	if (localStorage.getItem("JWT")) {
-		const result = await api.post(`/user/dashboard`)
+		const result = await api.get(`/user/dashboard`)
 		const { data } = result
 		return data
 	}
@@ -28,9 +28,7 @@ export const dashboard = async () => {
 }
 
 export const getUserInfos = async () => {
-	const result = await api.get("/user", {
-		Authorization: `Bearer ${localStorage.getItem("JWT")}`,
-	})
+	const result = await api.get("/user/")
 	const { data } = result
 	return data
 }
@@ -42,7 +40,10 @@ export const sendRepo = async (content) => {
 }
 
 export const updateApiToken = (token) => {
-	localStorage.setItem("JWT", token)
-	api.defaults.headers.common["Authorization"] = `Bearer ${token}`
-	console.log(api.defaults)
+	if (token) {
+		localStorage.setItem("JWT", token)
+		api.defaults.headers.common["Authorization"] = `Bearer ${token}`
+		return true
+	}
+	return false
 }

@@ -9,6 +9,7 @@
   "dependencies": {
     "@grafikart/drop-files-element": "^1.0.9",
     "axios": "^0.21.1",
+    "confetti-js": "^0.0.18",
     "core-js": "^3.6.5",
     "filepond": "^4.27.0",
     "filepond-plugin-file-validate-type": "^1.2.6",

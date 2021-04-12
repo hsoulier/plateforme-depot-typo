@@ -4,9 +4,7 @@ import { checkToken } from "../controllers/global.js"
 const router = Router()
 
 router.post("/login", loginUser)
-router.get("/dashboard", checkToken, (req, res) => {
-	res.json({ message: "Test" })
-})
+router.get("/dashboard", checkToken, getInfosUser)
 router.get("/", checkToken, getInfosUser)
 
 export default router
