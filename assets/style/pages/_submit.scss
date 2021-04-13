@@ -1,0 +1,57 @@
+.submit-repo-content {
+	canvas {
+		display: none;
+		position: absolute;
+		top: 0;
+		left: 0;
+		height: 100vh;
+		width: 100%;
+		z-index: 999;
+	}
+	h2 {
+		font-size: space(5);
+		text-transform: uppercase;
+		font-weight: 600;
+		margin-bottom: space(2);
+	}
+	.wait {
+		cursor: wait;
+		opacity: 20%;
+	}
+	textarea {
+		min-height: 3rem;
+		width: 100%;
+		resize: vertical;
+		font: inherit;
+		border: 2px solid var(--clr-primary);
+		padding: space(2) space(1);
+		background-color: transparent;
+	}
+	form {
+		display: grid;
+		gap: space(2);
+		margin-top: space(6);
+		grid-template-columns: repeat(2, minmax(300px, 1fr));
+		@media screen and (max-width: 1200px) {
+			grid-template-columns: 1fr;
+		}
+		& > div {
+			max-width: space(60);
+			& > * + * {
+				margin-top: space(3);
+			}
+			&:last-child {
+				margin-top: 0;
+			}
+		}
+	}
+	.stretch {
+		align-self: stretch;
+		& > * {
+			height: 100%;
+		}
+	}
+	button {
+		@extend %btn;
+	}
+}

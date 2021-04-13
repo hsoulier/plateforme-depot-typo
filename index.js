@@ -9,8 +9,7 @@ import handlebars from "handlebars"
 import { allowInsecurePrototypeAccess } from "@handlebars/allow-prototype-access"
 import routerIndex from "./routes/index.js"
 import routerUser from "./routes/user.js"
-import routerPopulate from "./utils/populate.js"
-import routerTest from "./utils/routerTest.js"
+import { returnButton } from "./utils/handlebars.js"
 
 dotenv.config()
 const app = express()
@@ -32,14 +31,7 @@ const hbs = exphbs.create({
 	partialsDir: "views/partials",
 	handlebars: allowInsecurePrototypeAccess(handlebars),
 	helpers: {
-		returnButton: function () {
-			const page = arguments[0].toLowerCase()
-			return page !== "home"
-				? new handlebars.SafeString(
-						`<a href="/" class="return-home"><svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="butt" stroke-linejoin="arcs"><path d="M19 12H6M12 5l-7 7 7 7"/></svg></a>`
-				  )
-				: null
-		},
+		returnButton,
 	},
 })
 
@@ -54,8 +46,6 @@ app.set("view engine", "hbs")
 app.engine("hbs", hbs.engine)
 
 // Router
-app.use("/populate", routerPopulate)
-app.use("/test", routerTest)
 app.use("/user", routerUser)
 app.use("/", routerIndex)
 app.all("*", (req, res) => {

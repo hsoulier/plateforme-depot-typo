@@ -1,10 +1,10 @@
 import "../style/main.scss"
-import "@grafikart/drop-files-element"
+import "./lib/drop-files.js"
 import barba from "@barba/core"
 import gsap from "gsap"
 import { enteringAnim } from "./animations/global.js"
-import SliderImage from "./home"
-import { Login } from "./login"
+import SliderImage from "./home/index.js"
+import { Login } from "./login/index.js"
 
 class App {
 	constructor() {

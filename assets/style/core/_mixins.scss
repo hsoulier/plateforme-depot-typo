@@ -2,9 +2,15 @@
 	@return $space * $m;
 }
 
-@function randomNum($min, $max) {
-  $rand: random();
-  $randomNum: $min + floor($rand * (($max - $min) + 1));
-
-  @return $randomNum;
+@mixin heading() {
+	$j: 4;
+	$multiplier: 1.22;
+	@for $i from 1 through $j {
+		.h-#{$j} {
+			font: 700
+				calc(1rem * (#{$i} * #{$multiplier})) /#{$multiplier}
+				var(--font);
+		}
+		$j: $j - 1;
+	}
 }

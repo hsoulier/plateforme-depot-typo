@@ -78,6 +78,7 @@ const extractBearerToken = (headerValue) => {
 }
 
 export function checkToken(req, res, next) {
+	console.log(req.headers)
 	const token =
 		req.headers.authorization &&
 		extractBearerToken(req.headers.authorization)

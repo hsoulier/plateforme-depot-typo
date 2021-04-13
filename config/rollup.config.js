@@ -12,11 +12,10 @@ export default {
 	input: "assets/js/index.js",
 	output: {
 		file: "public/js/app.js",
-		format: "iife",
+		format: "umd",
 	},
 	plugins: [
 		nodePolyfills(),
-		json(),
 		scss({
 			sourceMap: !production,
 			watch: "./assets/style",
@@ -26,6 +25,7 @@ export default {
 			runtime: sass,
 		}),
 		resolve({ browser: true }),
+		json(),
 		commonjs(),
 		production && terser(),
 	],

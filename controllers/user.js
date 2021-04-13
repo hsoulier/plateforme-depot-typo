@@ -17,6 +17,12 @@ export async function loginUser(req, res) {
 	}
 }
 
+export const getInfosUser = async (req, res) => {
+	const user = await User.findById(req.token.id, "-password")
+	console.log(user)
+	return res.json(user)
+}
+
 export async function updatePassword(req, res) {
 	const method = req.method.toLowerCase()
 	if (method === "get") return res.render("update")

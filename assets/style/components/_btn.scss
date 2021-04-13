@@ -1,0 +1,15 @@
+%btn {
+	border: 2px solid var(--clr-primary);
+	transition: border-color var(--ease), background var(--ease);
+	padding: space(1.75) space(2.5);
+	text-transform: uppercase;
+	font: inherit;
+	background: var(--clr-primary);
+	font-weight: 600;
+	cursor: pointer;
+
+	&:hover {
+		border-color: var(--clr-black);
+		background: var(--clr-white);
+	}
+}
