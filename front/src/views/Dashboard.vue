@@ -1,26 +1,76 @@
 <template>
 	<ContainerContent>
-		<h1 class="h1">Bonjour</h1>
+		<h1 class="h-1">Bonjour, {{user.name}}</h1>
+		<BaseModal :isCollapse="collapsed">
+			<div class="form-row">
+				<div class="form-control">
+					<input type="email" v-model="this.user.email" name="email" />
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2.5"
+						stroke-linecap="butt"
+						stroke-linejoin="arcs"
+					>
+						<circle cx="12" cy="12" r="4" />
+						<path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.92 7.94" />
+					</svg>
+				</div>
+				<div class="form-control">
+					<input type="text" v-model="this.user.socials.instagram" />
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#000">
+						<path
+							d="M16.98 0a6.9 6.9 0 0 1 5.08 1.98A6.94 6.94 0 0 1 24 7.02v9.96c0 2.08-.68 3.87-1.98 5.13A7.14 7.14 0 0 1 16.94 24H7.06a7.06 7.06 0 0 1-5.03-1.89A6.96 6.96 0 0 1 0 16.94V7.02C0 2.8 2.8 0 7.02 0h9.96zm.05 2.23H7.06c-1.45 0-2.7.43-3.53 1.25a4.82 4.82 0 0 0-1.3 3.54v9.92c0 1.5.43 2.7 1.3 3.58a5 5 0 0 0 3.53 1.25h9.88a5 5 0 0 0 3.53-1.25 4.73 4.73 0 0 0 1.4-3.54V7.02a5 5 0 0 0-1.3-3.49 4.82 4.82 0 0 0-3.54-1.3zM12 5.76c3.39 0 6.2 2.8 6.2 6.2a6.2 6.2 0 0 1-12.4 0 6.2 6.2 0 0 1 6.2-6.2zm0 2.22a3.99 3.99 0 0 0-3.97 3.97A3.99 3.99 0 0 0 12 15.92a3.99 3.99 0 0 0 3.97-3.97A3.99 3.99 0 0 0 12 7.98zm6.44-3.77a1.4 1.4 0 1 1 0 2.8 1.4 1.4 0 0 1 0-2.8z"
+						/>
+					</svg>
+				</div>
+				<div class="form-control">
+					<input type="text" v-model="this.user.socials.twitter" />
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2.5"
+						stroke-linecap="butt"
+						stroke-linejoin="arcs"
+					>
+						<path
+							d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"
+						/>
+					</svg>
+				</div>
+			</div>
+		</BaseModal>
 	</ContainerContent>
 </template>
 
 <script>
+import BaseModal from "@/components/BaseModal.vue";
 import ContainerContent from "@/components/ContainerContent.vue";
-import { dashboard } from "@/config/requests";
+import { getUserInfos } from "@/config/requests";
 
 export default {
 	name: "Dashboard",
+	data() {
+		return {
+			user: JSON.parse(localStorage.getItem("userInfos")) || null,
+			collapsed: true
+		};
+	},
 	components: {
 		ContainerContent
 	},
-	mounted() {
-		if (localStorage.getItem("JWT")) {
+	async mounted() {
+		if (!localStorage.getItem("JWT")) {
 			this.$router.push({ name: "Login" });
 		}
-		this.$nextTick(async () => {
-			// const result = await getUserInfos();
-			console.log(this.data);
-		});
+		if (!this.user) {
+			const r = await getUserInfos();
+			this.user = r;
+		}
 	}
 };
 </script>

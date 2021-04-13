@@ -18,19 +18,13 @@ export const loginUser = async (body) => {
 	return data.token
 }
 
-export const dashboard = async () => {
-	if (localStorage.getItem("JWT")) {
-		const result = await api.get(`/user/dashboard`)
-		const { data } = result
-		return data
-	}
-	return null
-}
-
 export const getUserInfos = async () => {
-	const result = await api.get("/user/")
-	const { data } = result
-	return data
+	let r = null
+	if (!localStorage.getItem("userInfos")) {
+		r = await api.get("/user")
+		localStorage.setItem("userInfos", JSON.stringify(r.data))
+	}
+	return r ? r.data : JSON.parse(localStorage.getItem("userInfos"))
 }
 
 export const sendRepo = async (content) => {

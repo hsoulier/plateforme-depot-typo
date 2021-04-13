@@ -12,9 +12,7 @@
 					<a href="mailto:contact.repo-typo@gmail.com">contact</a>
 				</li>
 				<li>
-					<router-link to="/legals"
-						>politique de confidentialité</router-link
-					>
+					<router-link to="/legals">politique de confidentialité</router-link>
 				</li>
 			</ul>
 		</div>
@@ -22,61 +20,65 @@
 </template>
 
 <script>
-	import { getRules } from "@/config/requests"
+import { getRules } from "@/config/requests";
 
-	export default {
-		name: "Rules",
-		data() {
-			return {
-				rules: {
-					title: null,
-					content: null,
-				},
+export default {
+	name: "Rules",
+	data() {
+		return {
+			rules: {
+				title: null,
+				content: null
 			}
-		},
-		async mounted() {
-			this.rules = await getRules()
-		},
+		};
+	},
+	async mounted() {
+		if (!sessionStorage.getItem("rules")) {
+			const a = await getRules();
+			sessionStorage.setItem("rules", JSON.stringify(a));
+		}
+		this.rules = JSON.parse(sessionStorage.getItem("rules"));
 	}
+};
 </script>
 
 <style lang="scss" scoped>
-	.rules {
-		grid-area: rules;
+.rules {
+	grid-area: rules;
+	overflow: hidden;
+	position: relative;
+	.v-line {
+		@extend %v-line;
+		transform-origin: bottom;
+	}
+	.h-line {
+		@extend %h-line;
+	}
+	padding: space(4);
+	&__container {
+		display: grid;
+		height: 100%;
+		grid-template: 1fr min-content / 1fr;
+	}
+	&__rules {
 		overflow: hidden;
-		position: relative;
-		.v-line {
-			@extend %v-line;
-			transform-origin: bottom;
-		}
-		.h-line {
-			@extend %h-line;
-		}
-		padding: space(4);
-		&__container {
-			display: grid;
-			height: 100%;
-			grid-template: 1fr min-content / 1fr;
-		}
-		&__rules {
-			overflow: hidden;
-			h3 {
-				text-transform: uppercase;
-				font-weight: 500;
-				font-size: space(3);
-				margin-bottom: space(3);
-			}
-			p {
-				line-height: 1.5;
-			}
-		}
-		&__footer {
-			overflow: hidden;
+		h3 {
 			text-transform: uppercase;
-			font-weight: 300;
-			li + li {
-				margin-top: space(1);
-			}
+			font-weight: 500;
+			font-size: space(3);
+			margin-bottom: space(3);
+		}
+		p {
+			line-height: 1.5;
 		}
 	}
+	&__footer {
+		overflow: hidden;
+		text-transform: uppercase;
+		font-weight: 300;
+		li + li {
+			margin-top: space(1);
+		}
+	}
+}
 </style>

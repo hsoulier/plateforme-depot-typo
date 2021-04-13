@@ -72,17 +72,10 @@ export default {
 			const result = updateApiToken(token);
 			if (result) {
 				this.$store.commit("loginUser", true);
-				// this.$router.push({ name: "Dashboard" });
+				this.$router.push({ name: "Dashboard" });
 			}
 			this.message = "La connexion a échouée";
 		}
-	},
-	mounted() {
-		// this.$nextTick(() => {
-		// 	if (localStorage.getItem("JWT")) {
-		// 		this.$router.push({ name: "Dashboard" });
-		// 	}
-		// });
 	}
 };
 </script>
