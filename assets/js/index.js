@@ -5,6 +5,7 @@ import gsap from "gsap"
 import { enteringAnim } from "./animations/global.js"
 import SliderImage from "./home/index.js"
 import { Login } from "./login/index.js"
+import { Submit } from "./submit"
 
 class App {
 	constructor() {
@@ -12,11 +13,13 @@ class App {
 		this.loco = null
 		this.login = null
 	}
+
 	create() {
 		window.addEventListener("load", () => {
 			this.initBarba()
 		})
 	}
+
 	initBarba() {
 		barba.hooks.afterLeave(({ current }) => {
 			if (current.namespace === "home") {
@@ -40,6 +43,9 @@ class App {
 			if (next.namespace === "login") {
 				this.login = new Login({ form: ".login-form" })
 			}
+			if (next.namespace === "submit-repo") {
+				this.submit = new Submit()
+			}
 		})
 		barba.init({
 			debug: false,
@@ -57,13 +63,14 @@ class App {
 					enter({ next }) {
 						gsap.from(next.container, {
 							y: 50,
-							opacity: 0,
+							opacity: 0
 						})
-					},
-				},
-			],
+					}
+				}
+			]
 		})
 	}
+
 	resizeWord() {
 		const word = document.querySelector(".current-word h1") || false
 		const w = document.querySelector("[data-barba=container]").clientWidth

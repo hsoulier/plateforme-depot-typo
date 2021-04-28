@@ -5699,23 +5699,23 @@
 			loaderWrap: document.querySelector(".loader-screen"),
 			percent: document.getElementById("loader"),
 			bar: document.querySelector(".loader-screen__progress"),
-			spans: document.querySelectorAll(".loader-screen span"),
+			spans: document.querySelectorAll(".loader-screen span")
 		},
 		navbar: {
 			links: document.querySelectorAll(".nav__link a"),
-			vLine: document.querySelector(".nav .v-line"),
+			vLine: document.querySelector(".nav .v-line")
 		},
 		rules: {
 			hLine: document.querySelector(".rules .h-line"),
 			vLine: document.querySelector(".rules .v-line"),
 			content: document.querySelectorAll(
 				".rules__rules > *, .rules__footer > *"
-			),
+			)
 		},
-		content: document.querySelectorAll(".current-word > *"),
+		content: document.querySelectorAll(".current-word > *")
 	};
 	let a = {
-		load: 0,
+		load: 0
 	};
 	const enteringAnim = () => {
 		const tl = gsapWithCSS.timeline();
@@ -5724,12 +5724,12 @@
 			duration: 1.5,
 			ease: "power5.inOut",
 			onUpdate: () => {
-				DOM.loader.percent.innerHTML = Math.floor(a.load);
+				DOM.loader.percent.innerHTML = `${Math.floor(a.load)}`;
 				DOM.loader.bar.style.setProperty(
 					"transform",
 					`translate3d(calc(${Math.floor(a.load) - 100} * 1%), 0, 0)`
 				);
-			},
+			}
 		})
 			.to(
 				DOM.loader.loaderWrap,
@@ -5741,22 +5741,22 @@
 							"pointer-events",
 							"none"
 						);
-					},
+					}
 				},
 				"+=.75"
 			)
 			.from(DOM.rules.hLine, {
-				x: "-100%",
+				x: "-100%"
 			})
 			.from(DOM.rules.vLine, {
 				y: "-100%",
-				duration: 0.8,
+				duration: 0.8
 			})
 			.from(
 				DOM.navbar.vLine,
 				{
 					y: "100%",
-					duration: 0.8,
+					duration: 0.8
 				},
 				"-=.8"
 			)
@@ -5764,7 +5764,7 @@
 				DOM.navbar.links,
 				{
 					y: "120%",
-					stagger: 0.18,
+					stagger: 0.18
 				},
 				"-=.3"
 			)
@@ -5773,7 +5773,7 @@
 				{
 					opacity: 0,
 					x: -50,
-					stagger: 0.18,
+					stagger: 0.18
 				},
 				"-=.4"
 			)
@@ -5782,7 +5782,7 @@
 				{
 					opacity: 0,
 					stagger: 0.18,
-					ease: "linear",
+					ease: "linear"
 				},
 				"-=.5"
 			);
@@ -10900,10 +10900,9 @@
 	});
 
 	const api = axios.create({
-		baseURL: "",
+		baseURL: "http://localhost:3005",
 		headers: {
 			"Content-Type": "application/json",
-			Authorization: `Bearer ${window.localStorage.getItem("JWT")}`,
 		},
 	});
 
@@ -10913,11 +10912,23 @@
 		return data.token
 	};
 
+	const getUserInfos = async () => {
+		if (!window.localStorage.hasOwnProperty("userInfos")) {
+			const r = await api.get("/user");
+			window.localStorage.setItem("userInfos", JSON.stringify(r.data));
+		}
+		return JSON.parse(window.localStorage.getItem("userInfos"))
+	};
+
+	const sendRepo = async (content) => {
+		return await api.post("/api/v1/submit-repo", content)
+	};
+
 	const updateApiToken = (token) => {
 		if (token) {
 			window.localStorage.setItem("JWT", token);
 			api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-			console.log(api.defaults.headers.common);
+			console.log(api.defaults);
 			return true
 		}
 		return false
@@ -10928,6 +10939,7 @@
 			this.form = document.querySelector(form);
 			this.onSubmit();
 		}
+
 		onSubmit() {
 			this.form.addEventListener("submit", async (e) => {
 				e.preventDefault();
@@ -10942,8 +10954,43 @@
 				const body = { email, password };
 				const token = await loginUser(body);
 				updateApiToken(token);
+				await getUserInfos();
 				$base.querySelector("button").innerHTML = oldText;
-				// window.location.href = "/user"
+				// window.location.replace = "/user"
+			});
+		}
+	}
+
+	class Submit {
+		constructor() {
+			if (window.localStorage.hasOwnProperty("userInfos")) {
+				const infos = JSON.parse(window.localStorage.getItem("userInfos"));
+				console.log(infos);
+				const form = {
+					firstName: document.querySelector("input[name=firstName]"),
+					name: document.querySelector("input[name=name]"),
+					email: document.querySelector("input[name=email]"),
+					twitter: document.querySelector("input[name=instagram]"),
+					instagram: document.querySelector("input[name=twitter]"),
+					description: document.querySelector("textarea"),
+					files: document.querySelector("input[type=file]")
+				};
+				form.firstName.value = infos.name.split(" ")[0];
+				form.name.value = infos.name.split(" ")[1];
+				form.email.value = infos.email;
+				form.twitter.value = infos.socials.twitter;
+				form.instagram.value = infos.socials.instagram;
+			}
+			this.onSubmit();
+		}
+
+		onSubmit() {
+			document.querySelector("form").addEventListener("submit", async (e) => {
+				e.preventDefault();
+				let formData = new FormData(document.querySelector("form"));
+				window.localStorage.hasOwnProperty("userInfos") && formData.append("userId", JSON.parse(window.localStorage.getItem("userInfos"))._id);
+				const result = await sendRepo(formData);
+				console.log(result);
 			});
 		}
 	}
@@ -10954,11 +11001,13 @@
 			this.loco = null;
 			this.login = null;
 		}
+
 		create() {
 			window.addEventListener("load", () => {
 				this.initBarba();
 			});
 		}
+
 		initBarba() {
 			barba_umd.hooks.afterLeave(({ current }) => {
 				if (current.namespace === "home") {
@@ -10982,6 +11031,9 @@
 				if (next.namespace === "login") {
 					this.login = new Login({ form: ".login-form" });
 				}
+				if (next.namespace === "submit-repo") {
+					this.submit = new Submit();
+				}
 			});
 			barba_umd.init({
 				debug: false,
@@ -10999,13 +11051,14 @@
 						enter({ next }) {
 							gsapWithCSS.from(next.container, {
 								y: 50,
-								opacity: 0,
+								opacity: 0
 							});
-						},
-					},
-				],
+						}
+					}
+				]
 			});
 		}
+
 		resizeWord() {
 			const word = document.querySelector(".current-word h1") || false;
 			const w = document.querySelector("[data-barba=container]").clientWidth;

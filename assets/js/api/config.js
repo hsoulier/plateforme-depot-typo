@@ -1,9 +1,8 @@
 import axios from "@bundled-es-modules/axios/axios.js"
 
 export const api = axios.create({
-	baseURL: "",
+	baseURL: "http://localhost:3005",
 	headers: {
 		"Content-Type": "application/json",
-		Authorization: `Bearer ${window.localStorage.getItem("JWT")}`,
 	},
 })

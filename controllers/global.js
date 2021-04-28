@@ -3,35 +3,9 @@ import Word from "../models/Word.js"
 import { statSync, readdirSync } from "fs"
 import { join } from "path"
 import jwt from "jsonwebtoken"
+import { getFilesRecursively, shuffleArray } from "../utils/index.js"
 
-const shuffleArray = (array) => {
-	for (var i = array.length - 1; i > 0; i--) {
-		var j = Math.floor(Math.random() * (i + 1))
-		var temp = array[i]
-		array[i] = array[j]
-		array[j] = temp
-	}
-}
 let imgs = []
-const isDirectory = (path) => statSync(path).isDirectory()
-const getDirectories = (path) =>
-	readdirSync(path)
-		.map((name) => join(path, name))
-		.filter(isDirectory)
-
-const isFile = (path) => statSync(path).isFile()
-const getFiles = (path) =>
-	readdirSync(path)
-		.map((name) => join(path, name))
-		.filter(isFile)
-
-const getFilesRecursively = (path) => {
-	let dirs = getDirectories(path)
-	let files = dirs
-		.map((dir) => getFilesRecursively(dir))
-		.reduce((a, b) => a.concat(b), [])
-	return files.concat(getFiles(path))
-}
 
 export async function home(req, res) {
 	imgs = getFilesRecursively(`./public/uploads`)
@@ -56,11 +30,12 @@ export async function getRules(req, res, next) {
 	next()
 }
 
-export function createToken({ id, email }) {
+export function createToken({ id, email, isAdmin }) {
 	const token = jwt.sign(
 		{
 			id,
-			email,
+			isAdmin,
+			email
 		},
 		process.env.SECRET_JWT,
 		{ expiresIn: "1d" }
@@ -84,12 +59,12 @@ export function checkToken(req, res, next) {
 		extractBearerToken(req.headers.authorization)
 
 	if (!token) {
-		return res.status(401).json({ message: "Error. Need a token" })
+		return res.status(401).json({ error: "Error. Need a token" })
 	}
 
-	jwt.verify(token, SECRET_JWT, (err, decodedToken) => {
+	jwt.verify(token, process.env.SECRET_JWT, (err, decodedToken) => {
 		if (err) {
-			res.status(401).json({ message: "Error. Bad token" })
+			res.status(401).json({ error: "Error. Bad token" })
 		} else {
 			req.token = decodedToken
 			return next()

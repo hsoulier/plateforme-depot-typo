@@ -1,10 +1,11 @@
-import { loginUser, updateApiToken } from "../api/index.js"
+import { getUserInfos, loginUser, updateApiToken } from "../api/index.js"
 
 export class Login {
 	constructor({ form }) {
 		this.form = document.querySelector(form)
 		this.onSubmit()
 	}
+
 	onSubmit() {
 		this.form.addEventListener("submit", async (e) => {
 			e.preventDefault()
@@ -19,8 +20,9 @@ export class Login {
 			const body = { email, password }
 			const token = await loginUser(body)
 			const result = updateApiToken(token)
+			const userInfos = await getUserInfos()
 			$base.querySelector("button").innerHTML = oldText
-			// window.location.href = "/user"
+			// window.location.replace = "/user"
 		})
 	}
 }

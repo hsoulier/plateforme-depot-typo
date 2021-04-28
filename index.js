@@ -9,6 +9,7 @@ import handlebars from "handlebars"
 import { allowInsecurePrototypeAccess } from "@handlebars/allow-prototype-access"
 import routerIndex from "./routes/index.js"
 import routerUser from "./routes/user.js"
+import routerApi from "./routes/api.js"
 import { returnButton } from "./utils/handlebars.js"
 
 dotenv.config()
@@ -17,7 +18,7 @@ const app = express()
 mongoose
 	.connect(process.env.DB_URI, {
 		useNewUrlParser: true,
-		useUnifiedTopology: true,
+		useUnifiedTopology: true
 	})
 	.then(() => {
 		console.log("Connected")
@@ -31,8 +32,8 @@ const hbs = exphbs.create({
 	partialsDir: "views/partials",
 	handlebars: allowInsecurePrototypeAccess(handlebars),
 	helpers: {
-		returnButton,
-	},
+		returnButton
+	}
 })
 
 // Global middlewares
@@ -46,6 +47,7 @@ app.set("view engine", "hbs")
 app.engine("hbs", hbs.engine)
 
 // Router
+app.use("/api/v1", routerApi)
 app.use("/user", routerUser)
 app.use("/", routerIndex)
 app.all("*", (req, res) => {

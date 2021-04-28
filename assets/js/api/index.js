@@ -30,16 +30,14 @@ export const getUserInfos = async () => {
 }
 
 export const sendRepo = async (content) => {
-	const result = await api.post("/repo", content)
-	const { data } = result
-	return data
+	return await api.post("/api/v1/submit-repo", content)
 }
 
 export const updateApiToken = (token) => {
 	if (token) {
 		window.localStorage.setItem("JWT", token)
 		api.defaults.headers.common["Authorization"] = `Bearer ${token}`
-		console.log(api.defaults.headers.common)
+		console.log(api.defaults)
 		return true
 	}
 	return false

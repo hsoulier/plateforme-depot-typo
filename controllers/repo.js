@@ -1,29 +1,31 @@
 import Repo from "../models/Repo.js"
+import Word from "../models/Word.js"
 import archiver from "archiver"
 import { formatBytes, jsonReader, delAt } from "../utils/index.js"
 import fs, { promises as fsPromises } from "fs"
 import path from "path"
 
-export function uploadRepo(req, res, next) {
-	const { nickname, name, instagram, twitter, email, description } = req.body
+export async function uploadRepo(req, res, next) {
+	const { firstName, name, instagram, twitter, email, description, userId } = req.body
 	const socialNetwork = {
 		instagram: delAt(instagram),
-		twitter: delAt(twitter),
+		twitter: delAt(twitter)
 	}
 	console.log(req.files)
 	const files = []
 	req.files.forEach((file) => {
 		files.push(file.filename)
 	})
-	console.log({ nickname, name, socialNetwork, email, files })
 	try {
+		const currentWord = await Word.find({ isCurrent: true })
 		const repo = new Repo({
-			nickname,
-			name,
+			name: `${firstName} ${name}`,
 			email,
 			description,
 			socialNetwork,
 			files,
+			wordId: currentWord._id,
+			userId
 		})
 		repo.save((err) => {
 			if (err) return res.render("success", { success: false })
@@ -61,12 +63,13 @@ export function getAllRepos(req, res) {
 		res.redirect("/login")
 	}
 }
+
 export function zipFiles(req, res) {
 	const __dirname = path.resolve()
 	const filename = `fonts-${Math.random().toString(36).substring(2)}.zip`
 	const output = fs.createWriteStream(__dirname + `/public/repos/${filename}`)
 	const archive = archiver("zip", {
-		zlib: { level: 9 }, // Sets the compression level.
+		zlib: { level: 9 } // Sets the compression level.
 	})
 	output.on("close", () => {
 		console.log(
