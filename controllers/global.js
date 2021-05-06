@@ -35,7 +35,7 @@ export function createToken({ id, email, isAdmin }) {
 		{
 			id,
 			isAdmin,
-			email
+			email,
 		},
 		process.env.SECRET_JWT,
 		{ expiresIn: "1d" }
@@ -44,6 +44,7 @@ export function createToken({ id, email, isAdmin }) {
 }
 
 const extractBearerToken = (headerValue) => {
+	console.log(headerValue)
 	if (typeof headerValue !== "string") {
 		return false
 	}
@@ -59,7 +60,7 @@ export function checkToken(req, res, next) {
 		extractBearerToken(req.headers.authorization)
 
 	if (!token) {
-		return res.status(401).json({ error: "Error. Need a token" })
+		return res.status(401).json({ message: `Error no token found in headers ${JSON.stringify(req.headers)}` })
 	}
 
 	jwt.verify(token, process.env.SECRET_JWT, (err, decodedToken) => {

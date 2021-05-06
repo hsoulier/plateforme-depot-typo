@@ -31,7 +31,7 @@
 		display: grid;
 		gap: space(2);
 		margin-top: space(6);
-		grid-template-columns: repeat(2, minmax(300px, 1fr));
+		grid-template-columns: minmax(min-content, 30rem) 1fr;
 		@media screen and (max-width: 1200px) {
 			grid-template-columns: 1fr;
 		}
@@ -46,6 +46,7 @@
 		}
 	}
 	.stretch {
+		max-width: none;
 		align-self: stretch;
 		& > * {
 			height: 100%;
@@ -53,5 +54,15 @@
 	}
 	button {
 		@extend %btn;
+		&.large {
+			font-size: space(3);
+			padding-left: space(5);
+			padding-right: space(5);
+		}
+	}
+
+	.form-submit {
+		max-width: none;
+		grid-column: 1 / span 2;
 	}
 }

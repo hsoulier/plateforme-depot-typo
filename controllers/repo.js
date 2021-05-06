@@ -6,10 +6,18 @@ import fs, { promises as fsPromises } from "fs"
 import path from "path"
 
 export async function uploadRepo(req, res, next) {
-	const { firstName, name, instagram, twitter, email, description, userId } = req.body
+	const {
+		firstName,
+		name,
+		instagram,
+		twitter,
+		email,
+		description,
+		userId,
+	} = req.body
 	const socialNetwork = {
 		instagram: delAt(instagram),
-		twitter: delAt(twitter)
+		twitter: delAt(twitter),
 	}
 	console.log(req.files)
 	const files = []
@@ -25,14 +33,14 @@ export async function uploadRepo(req, res, next) {
 			socialNetwork,
 			files,
 			wordId: currentWord._id,
-			userId
+			userId,
 		})
 		repo.save((err) => {
-			if (err) return res.render("success", { success: false })
-			res.render("success", { success: true })
+			if (err) return res.json({ message: "Error, repo not saved" })
+			res.json({ message: "Success, the repo was uploaded" })
 		})
 	} catch (e) {
-		res.render("success", { success: false })
+		res.json({ message: `Error, repo not saved, ${e}` })
 	}
 }
 
@@ -69,7 +77,7 @@ export function zipFiles(req, res) {
 	const filename = `fonts-${Math.random().toString(36).substring(2)}.zip`
 	const output = fs.createWriteStream(__dirname + `/public/repos/${filename}`)
 	const archive = archiver("zip", {
-		zlib: { level: 9 } // Sets the compression level.
+		zlib: { level: 9 }, // Sets the compression level.
 	})
 	output.on("close", () => {
 		console.log(
@@ -82,13 +90,13 @@ export function zipFiles(req, res) {
 	})
 	archive.on("warning", (err) => {
 		if (err.code === "ENOENT") {
-			return res.render("success", { success: false })
+			return res.json({ message: `Error, compression failed, ${e}` })
 		} else {
 			throw err
 		}
 	})
 	archive.on("error", (err) => {
-		res.status(500).render("success", { success: false })
+		res.status(500).json({ message: `Error, compression failed, ${e}` })
 		throw err
 	})
 	archive.pipe(output)

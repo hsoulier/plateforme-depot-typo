@@ -7,8 +7,7 @@ import mongoose from "mongoose"
 import exphbs from "express-handlebars"
 import handlebars from "handlebars"
 import { allowInsecurePrototypeAccess } from "@handlebars/allow-prototype-access"
-import routerIndex from "./routes/index.js"
-import routerUser from "./routes/user.js"
+import routerPages from "./routes/page.js"
 import routerApi from "./routes/api.js"
 import { returnButton } from "./utils/handlebars.js"
 
@@ -18,7 +17,7 @@ const app = express()
 mongoose
 	.connect(process.env.DB_URI, {
 		useNewUrlParser: true,
-		useUnifiedTopology: true
+		useUnifiedTopology: true,
 	})
 	.then(() => {
 		console.log("Connected")
@@ -32,8 +31,8 @@ const hbs = exphbs.create({
 	partialsDir: "views/partials",
 	handlebars: allowInsecurePrototypeAccess(handlebars),
 	helpers: {
-		returnButton
-	}
+		returnButton,
+	},
 })
 
 // Global middlewares
@@ -48,8 +47,7 @@ app.engine("hbs", hbs.engine)
 
 // Router
 app.use("/api/v1", routerApi)
-app.use("/user", routerUser)
-app.use("/", routerIndex)
+app.use("/", routerPages)
 app.all("*", (req, res) => {
 	res.render("404")
 })

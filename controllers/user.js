@@ -5,15 +5,17 @@ import { createToken } from "./global.js"
 export async function loginUser(req, res) {
 	try {
 		const { email, password } = req.body
+
+		console.log({ email, password })
 		const userDb = await User.findOne({ email })
-		if (!Boolean(userDb)) return res.json({ success: "Bad email" })
+		if (!Boolean(userDb)) return res.json({ message: "Error, wrong email" })
 		const result = await bcrypt.compare(password, userDb.password)
-		if (!result) return res.json({ success: "Bad password" })
+		if (!result) return res.json({ message: "Error, wrong pasword" })
 		const token = createToken(userDb)
 		return res.json({ token })
 		// return res.redirect("/dash")
 	} catch (e) {
-		return res.render("success", { success: false })
+		return res.json({ message: "Error, no user found" })
 	}
 }
 
@@ -28,7 +30,7 @@ export async function updatePassword(req, res) {
 	if (method === "get") return res.render("update")
 	const { password, user } = req.body
 	bcrypt.hash(password, 10, async (err, hash) => {
-		if (err) return res.render("success", { success: false })
+		if (err) return res.json({ message: `Error, password not updated, ${e}` })
 		const newUser = await User.updateOne({ user }, { password: hash })
 	})
 	req.session.loggedIn = undefined
@@ -42,9 +44,9 @@ export async function addingUser(req, res) {
 			const login = new User({ user, password: hash })
 			const newUser = await login.save()
 			console.log(newUser)
-			res.render("success")
+			res.json({ message: `Success, user created` })
 		} catch (e) {
-			res.render("success", { success: false })
+			res.json({ message: `Error, user not created, ${e}` })
 		}
 	})
 }

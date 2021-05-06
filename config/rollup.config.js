@@ -17,7 +17,7 @@ export default {
 	plugins: [
 		nodePolyfills(),
 		scss({
-			sourceMap: !production,
+			sourceMap: true,
 			watch: "./assets/style",
 			output: "./public/css/style.css",
 			outputStyle: production ? "compressed" : "expanded",

@@ -1,6 +1,16 @@
 import { api } from "./config.js"
 
-// TDOD: Implement method on load
+// TODO: Implement method on load
+
+export const updateApiToken = (token) => {
+	if (token) {
+		window.localStorage.setItem("JWT", token)
+		api.defaults.headers.common["Authorization"] = `Bearer ${token}`
+		return true
+	}
+	return false
+}
+
 export const getRules = async () => {
 	if (!sessionStorage.hasOwnProperty("rules")) {
 		const r = await api.get("/content/rules")
@@ -16,14 +26,20 @@ export const getImages = async () => {
 }
 
 export const loginUser = async (body) => {
-	const result = await api.post("/user/login", body)
+	const result = await api.post("/api/v1/login", body)
 	const { data } = result
-	return data.token
+
+	console.log(data)
+	return updateApiToken(data.token)
 }
 
 export const getUserInfos = async () => {
 	if (!window.localStorage.hasOwnProperty("userInfos")) {
-		const r = await api.get("/user")
+		const r = await api.get("/api/v1/user-infos", {
+			headers: {
+				Authorization: `Bearer ${window.localStorage.getItem("JWT")}`,
+			},
+		})
 		window.localStorage.setItem("userInfos", JSON.stringify(r.data))
 	}
 	return JSON.parse(window.localStorage.getItem("userInfos"))
@@ -31,14 +47,4 @@ export const getUserInfos = async () => {
 
 export const sendRepo = async (content) => {
 	return await api.post("/api/v1/submit-repo", content)
-}
-
-export const updateApiToken = (token) => {
-	if (token) {
-		window.localStorage.setItem("JWT", token)
-		api.defaults.headers.common["Authorization"] = `Bearer ${token}`
-		console.log(api.defaults)
-		return true
-	}
-	return false
 }

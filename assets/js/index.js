@@ -48,7 +48,8 @@ class App {
 			}
 		})
 		barba.init({
-			debug: false,
+			debug: true,
+			prevent: (data) => console.log(data),
 			transitions: [
 				{
 					name: "Default Transition",
@@ -63,11 +64,11 @@ class App {
 					enter({ next }) {
 						gsap.from(next.container, {
 							y: 50,
-							opacity: 0
+							opacity: 0,
 						})
-					}
-				}
-			]
+					},
+				},
+			],
 		})
 	}
 

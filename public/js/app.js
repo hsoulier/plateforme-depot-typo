@@ -5699,29 +5699,31 @@
 			loaderWrap: document.querySelector(".loader-screen"),
 			percent: document.getElementById("loader"),
 			bar: document.querySelector(".loader-screen__progress"),
-			spans: document.querySelectorAll(".loader-screen span")
+			spans: document.querySelectorAll(".loader-screen span"),
 		},
 		navbar: {
 			links: document.querySelectorAll(".nav__link a"),
-			vLine: document.querySelector(".nav .v-line")
+			vLine: document.querySelector(".nav .v-line"),
 		},
 		rules: {
 			hLine: document.querySelector(".rules .h-line"),
 			vLine: document.querySelector(".rules .v-line"),
 			content: document.querySelectorAll(
 				".rules__rules > *, .rules__footer > *"
-			)
+			),
 		},
-		content: document.querySelectorAll(".current-word > *")
+		content: document.querySelectorAll(".current-word > *"),
 	};
 	let a = {
-		load: 0
+		load: 0,
 	};
+
+	const DEBUG = 0.1;
 	const enteringAnim = () => {
 		const tl = gsapWithCSS.timeline();
 		tl.to(a, {
 			load: 100,
-			duration: 1.5,
+			duration: DEBUG ,
 			ease: "power5.inOut",
 			onUpdate: () => {
 				DOM.loader.percent.innerHTML = `${Math.floor(a.load)}`;
@@ -5729,34 +5731,34 @@
 					"transform",
 					`translate3d(calc(${Math.floor(a.load) - 100} * 1%), 0, 0)`
 				);
-			}
+			},
 		})
 			.to(
 				DOM.loader.loaderWrap,
 				{
 					opacity: 0,
-					duration: 0.3,
+					duration: DEBUG ,
 					onComplete: () => {
 						DOM.loader.loaderWrap.style.setProperty(
 							"pointer-events",
 							"none"
 						);
-					}
+					},
 				},
 				"+=.75"
 			)
 			.from(DOM.rules.hLine, {
-				x: "-100%"
+				x: "-100%",
 			})
 			.from(DOM.rules.vLine, {
 				y: "-100%",
-				duration: 0.8
+				duration: DEBUG ,
 			})
 			.from(
 				DOM.navbar.vLine,
 				{
 					y: "100%",
-					duration: 0.8
+					duration: DEBUG ,
 				},
 				"-=.8"
 			)
@@ -5764,7 +5766,7 @@
 				DOM.navbar.links,
 				{
 					y: "120%",
-					stagger: 0.18
+					stagger: 0.18,
 				},
 				"-=.3"
 			)
@@ -5773,7 +5775,7 @@
 				{
 					opacity: 0,
 					x: -50,
-					stagger: 0.18
+					stagger: 0.18,
 				},
 				"-=.4"
 			)
@@ -5782,7 +5784,7 @@
 				{
 					opacity: 0,
 					stagger: 0.18,
-					ease: "linear"
+					ease: "linear",
 				},
 				"-=.5"
 			);
@@ -10906,15 +10908,32 @@
 		},
 	});
 
+	// TODO: Implement method on load
+
+	const updateApiToken = (token) => {
+		if (token) {
+			window.localStorage.setItem("JWT", token);
+			api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+			return true
+		}
+		return false
+	};
+
 	const loginUser = async (body) => {
-		const result = await api.post("/user/login", body);
+		const result = await api.post("/api/v1/login", body);
 		const { data } = result;
-		return data.token
+
+		console.log(data);
+		return updateApiToken(data.token)
 	};
 
 	const getUserInfos = async () => {
 		if (!window.localStorage.hasOwnProperty("userInfos")) {
-			const r = await api.get("/user");
+			const r = await api.get("/api/v1/user-infos", {
+				headers: {
+					Authorization: `Bearer ${window.localStorage.getItem("JWT")}`,
+				},
+			});
 			window.localStorage.setItem("userInfos", JSON.stringify(r.data));
 		}
 		return JSON.parse(window.localStorage.getItem("userInfos"))
@@ -10922,16 +10941,6 @@
 
 	const sendRepo = async (content) => {
 		return await api.post("/api/v1/submit-repo", content)
-	};
-
-	const updateApiToken = (token) => {
-		if (token) {
-			window.localStorage.setItem("JWT", token);
-			api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-			console.log(api.defaults);
-			return true
-		}
-		return false
 	};
 
 	class Login {
@@ -10952,11 +10961,18 @@
 				const email = $base.querySelector("input[type=email]").value;
 				const password = $base.querySelector("input[type=password]").value;
 				const body = { email, password };
-				const token = await loginUser(body);
-				updateApiToken(token);
-				await getUserInfos();
+				const result = await loginUser(body);
+
+				console.log(result);
+				if (result) {
+					const userInfos = await getUserInfos();
+					console.log(userInfos);
+					window.location.replace("/dashboard");
+					return
+				}
+
 				$base.querySelector("button").innerHTML = oldText;
-				// window.location.replace = "/user"
+				console.log("Raté");
 			});
 		}
 	}
@@ -11036,7 +11052,8 @@
 				}
 			});
 			barba_umd.init({
-				debug: false,
+				debug: true,
+				prevent: (data) => console.log(data),
 				transitions: [
 					{
 						name: "Default Transition",
@@ -11051,11 +11068,11 @@
 						enter({ next }) {
 							gsapWithCSS.from(next.container, {
 								y: 50,
-								opacity: 0
+								opacity: 0,
 							});
-						}
-					}
-				]
+						},
+					},
+				],
 			});
 		}
 

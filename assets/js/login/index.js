@@ -18,11 +18,18 @@ export class Login {
 			const email = $base.querySelector("input[type=email]").value
 			const password = $base.querySelector("input[type=password]").value
 			const body = { email, password }
-			const token = await loginUser(body)
-			const result = updateApiToken(token)
-			const userInfos = await getUserInfos()
+			const result = await loginUser(body)
+
+			console.log(result)
+			if (result) {
+				const userInfos = await getUserInfos()
+				console.log(userInfos)
+				window.location.replace("/dashboard")
+				return
+			}
+
 			$base.querySelector("button").innerHTML = oldText
-			// window.location.replace = "/user"
+			console.log("Raté")
 		})
 	}
 }
