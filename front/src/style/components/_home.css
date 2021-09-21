@@ -1,0 +1,20 @@
+.home {
+	min-height: calc(100 * var(--vh, 1vh));
+}
+.home h1 {
+	user-select: none;
+	font-size: clamp(4rem, 80ch, 36vw);
+	line-height: 1.15;
+	@apply text-center font-serif;
+}
+.rules p {
+	font-size: 2rem;
+}
+.rules {
+	max-width: 1500px;
+	@apply mx-auto px-8 pb-12;
+}
+
+.rules .btn {
+	@apply mt-6;
+}

@@ -53,6 +53,4 @@ export const userRoutes = async (fastify: FastifyInstance) => {
 			},
 		}
 	}, addingUser)
-
-
 }

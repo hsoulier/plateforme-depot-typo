@@ -1,0 +1,16 @@
+@import "./components/_navbar.css";
+@import "./components/_rules.css";
+@import "./components/_home.css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+html,
+body {
+	height: 100%;
+	width: 100%;
+	overflow: auto;
+}
+
+.btn {
+	@apply inline-block px-4 py-3 border-4 uppercase border-white bg-white text-black rounded-full text-2xl transition-colors duration-200 hover:bg-transparent hover:border-white;
+}
